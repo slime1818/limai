@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>Cross-biome style cohesion &mdash; Apu vs Puna (F6 scrim)</title>
+<title>Cross-biome style cohesion &mdash; Apu vs Puna vs Yungas (F6 scrim)</title>
 <style>
   :root {
     --f6-gradient: linear-gradient(90deg,
@@ -26,17 +26,23 @@
   button.active { background: #c8a26b; color: #1a1612; }
   button.new { border-color: #c8a26b; }
   button.legacy { opacity: 0.7; }
-  .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .trio { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; }
+  @media (max-width: 1100px) {
+    .trio { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 720px) {
+    .trio { grid-template-columns: 1fr; }
+  }
   .pane { position: relative; min-width: 0; }
   .pane-label { position: absolute; top: 6px; left: 6px;
                 background: rgba(26,22,18,0.9); padding: 3px 8px;
-                font-size: 0.72rem; border: 1px solid #3a2f26; z-index: 10; }
-  .scroll-wrap { overflow: auto; height: 72vh; border: 1px solid #3a2f26;
+                font-size: 0.7rem; border: 1px solid #3a2f26; z-index: 10; }
+  .scroll-wrap { overflow: auto; height: 70vh; border: 1px solid #3a2f26;
                  background: #0d0a08; position: relative; }
   .scroll-wrap img { display: block; transform-origin: top left;
                      image-rendering: pixelated; }
   .gradient-overlay { position: absolute; top: 0; left: 0; right: 0;
-                      height: 72vh; pointer-events: none; display: none;
+                      height: 70vh; pointer-events: none; display: none;
                       z-index: 5; background: var(--f6-gradient); }
   .pane.show-f6 .gradient-overlay { display: block; }
   table { border-collapse: collapse; width: 100%; font-size: 0.85rem;
@@ -46,8 +52,8 @@
        font-size: 0.72rem; letter-spacing: 0.05em; }
   td.num { font-variant-numeric: tabular-nums; text-align: right; }
   td.info { opacity: 0.72; }
-  p.note { font-size: 0.82rem; opacity: 0.75; max-width: 92ch; line-height: 1.55; }
-  p.caveat { font-size: 0.85rem; line-height: 1.55; max-width: 92ch;
+  p.note { font-size: 0.82rem; opacity: 0.75; max-width: 100ch; line-height: 1.55; }
+  p.caveat { font-size: 0.85rem; line-height: 1.55; max-width: 100ch;
              padding: 10px 14px; margin: 10px 0 0;
              background: rgba(200,162,107,0.08); border-left: 3px solid #c8a26b; }
   p.caveat strong { color: #c8a26b; }
@@ -55,7 +61,7 @@
 </style>
 </head>
 <body>
-<h1>Cross-biome style cohesion &mdash; Apu (biome 1) vs Puna (biome 2) &middot; F6 scrim</h1>
+<h1>Cross-biome style cohesion &mdash; Apu (1) vs Puna (2) vs Yungas (3) &middot; F6 scrim</h1>
 <div class="toolbar">
   <span>View:</span>
   <button data-view="f6" class="active new">F6 gradient (production)</button>
@@ -63,15 +69,15 @@
   <button data-view="scrim55" class="legacy">+55% scrim (legacy)</button>
   <button data-view="heatmap" class="legacy">Gate 8 heatmap (legacy)</button>
   <label>Zoom:
-    <input type="range" id="zoom" min="0.25" max="2" step="0.05" value="0.8">
-    <span id="zoom-val">80%</span>
+    <input type="range" id="zoom" min="0.25" max="2" step="0.05" value="0.7">
+    <span id="zoom-val">70%</span>
   </label>
-  <span style="opacity:0.6">Pan/scroll one pane to sync the other</span>
+  <span style="opacity:0.6">Pan/scroll one pane to sync the others</span>
 </div>
 
-<div class="pair">
+<div class="trio">
   <div class="pane show-f6">
-    <span class="pane-label">Apu &middot; biome 1 &middot; LEFT framing cliff</span>
+    <span class="pane-label">Apu &middot; biome 1 &middot; LEFT cliff</span>
     <div class="scroll-wrap" id="scroll-a">
       <img id="img-a"
            data-raw="apu/processed/apu-composite-alt.webp"
@@ -84,7 +90,7 @@
     <div class="gradient-overlay"></div>
   </div>
   <div class="pane show-f6">
-    <span class="pane-label">Puna &middot; biome 2 &middot; LEFT framing outcrop (Pad C locked)</span>
+    <span class="pane-label">Puna &middot; biome 2 &middot; LEFT outcrop</span>
     <div class="scroll-wrap" id="scroll-b">
       <img id="img-b"
            data-raw="puna/processed/puna-composite.webp"
@@ -96,93 +102,112 @@
     </div>
     <div class="gradient-overlay"></div>
   </div>
+  <div class="pane show-f6">
+    <span class="pane-label">Yungas &middot; biome 3 &middot; RIGHT trunk (Pad C mirror)</span>
+    <div class="scroll-wrap" id="scroll-c">
+      <img id="img-c"
+           data-raw="yungas/processed/yungas-composite.webp"
+           data-scrim55="yungas/processed/yungas-composite-scrim55.webp"
+           data-heatmap="yungas/processed/yungas-composite-heatmap.png"
+           data-f6="yungas/processed/yungas-composite.webp"
+           src="yungas/processed/yungas-composite.webp"
+           alt="Yungas composite">
+    </div>
+    <div class="gradient-overlay"></div>
+  </div>
 </div>
 
 <h2>Metrics &mdash; informational only, F6 gradient is the production scrim</h2>
 <table>
-<tr><th>Metric</th><th>Apu (biome 1)</th><th>Puna (biome 2)</th><th>Delta</th></tr>
+<tr><th>Metric</th><th>Apu (1)</th><th>Puna (2)</th><th>Yungas (3)</th></tr>
 <tr>
-  <td class="info">p95 contrast on +55% scrim composite (legacy measurement)</td>
+  <td class="info">p95 contrast on +55% scrim composite (legacy)</td>
   <td class="num info">5.35:1</td>
-  <td class="num info">3.59:1</td>
-  <td class="num info">-1.76</td>
+  <td class="num info">3.58:1</td>
+  <td class="num info">5.91:1</td>
 </tr>
 <tr>
-  <td class="info">Worst-pixel contrast on +55% scrim (legacy diagnostic)</td>
+  <td class="info">Worst-pixel contrast on +55% scrim (legacy)</td>
   <td class="num info">3.36:1</td>
-  <td class="num info">3.39:1</td>
-  <td class="num info">+0.03</td>
+  <td class="num info">3.11:1</td>
+  <td class="num info">4.28:1</td>
 </tr>
 <tr>
-  <td>Production composite file size (raw, WebP q90)</td>
+  <td>Production composite size (raw WebP q90)</td>
   <td class="num">91 KB</td>
   <td class="num">159 KB</td>
-  <td class="num">+75%</td>
+  <td class="num">140 KB</td>
 </tr>
 <tr>
-  <td class="info">+55% scrim composite file size (legacy preview)</td>
+  <td class="info">+55% scrim composite size (legacy preview)</td>
   <td class="num info">79 KB</td>
   <td class="num info">87 KB</td>
-  <td class="num info">+9%</td>
+  <td class="num info">72 KB</td>
+</tr>
+<tr>
+  <td class="info">Text-zone opaque px (legacy diagnostic)</td>
+  <td class="num info">112,500</td>
+  <td class="num info">112,500</td>
+  <td class="num info">112,500</td>
 </tr>
 </table>
 
 <p class="caveat">
-  <strong>Scrim architecture update (2026-04-18 late):</strong>
-  The 55% full-viewport scrim + per-biome calibration pass is <strong>superseded</strong> by the F6 left-gradient bar (CSS layer in the Next.js build, not baked into the painting). Gate 8 measurements above are retained as informational-only continuity data &mdash; they are NOT a production pass/fail gate. Puna&apos;s earlier body-AA fail (3.59:1 on +55% scrim) is architecturally resolved: the F6 gradient supplies local text-zone contrast independent of painting brightness per biome. Puna biome 2 is production-accepted.
+  <strong>Scrim architecture:</strong> F6 left-gradient (CSS layer at runtime in Next.js build, not baked). Gate 8 metrics above are informational continuity data only &mdash; Puna&apos;s earlier body-AA fail and any Yungas deviation are architecturally resolved by the F6 gradient. All 3 biomes production-accepted on painterly cohesion evaluation.
 </p>
 
 <h2>F6 gradient spec</h2>
 <p class="note">
   <code>background: linear-gradient(90deg, rgba(26,22,18,0.68) 0%, rgba(26,22,18,0.45) 30%, rgba(26,22,18,0.08) 55%, rgba(26,22,18,0.0) 72%);</code>
-  <br>Left ~55% viewport = natural text-contrast. Right ~45% viewport = painting fully visible. Text-content cross-biome lives in the left 50% viewport. Selva (TOP framing, Pad C) may require a rotated/adapted gradient variant to be decided at Selva prompt-authoring time.
+  <br>Left ~55% viewport = natural text-contrast. Right ~45% viewport = painting fully visible. Text-content cross-biome lives in the left 50% viewport. Selva (TOP framing, upcoming biome 4) may require a rotated/adapted gradient variant to be decided at Selva prompt-authoring time.
 </p>
 
 <h2>Reference</h2>
 <p class="note">
-  Both biomes at 1024&times;768 native (fal.ai UI flux-2-pro). Framing positions per Pad C: Apu+Puna LEFT cliff/outcrop (locked); Yungas/Selva/Paracas/Pac&iacute;fico TBD at prompt-authoring. Puna sky-subject layer carries cross-biome overlap zones (top 15% Apu-handoff distant snow-topped peaks; lower-middle 15% Yungas-hint cloud-forest mist wisps). Production composite = raw painterly WebP q90; F6 gradient applied at runtime by the Next.js frontend layer in Phase 2+.
+  All three biomes at 1024&times;768 native (fal.ai UI flux-2-pro). Pad C framing positions: Apu+Puna LEFT (cliff/outcrop), Yungas RIGHT (tree trunk &mdash; mirror validated). Yungas sky-subject L1 carries cross-biome overlap zones: top 15% Puna-handoff (mountain-flank silhouettes into mist), lower-middle 15% Selva-hint (warmer tropical green). Production composite = raw painterly WebP q90; F6 gradient applied at runtime by the Next.js frontend layer in Phase 2+.
 </p>
 
 <script>
-  const a = document.getElementById('scroll-a');
-  const b = document.getElementById('scroll-b');
+  const panes = [
+    { scroll: document.getElementById('scroll-a'), img: document.getElementById('img-a') },
+    { scroll: document.getElementById('scroll-b'), img: document.getElementById('img-b') },
+    { scroll: document.getElementById('scroll-c'), img: document.getElementById('img-c') },
+  ];
+  const allPanes = document.querySelectorAll('.pane');
   let syncing = false;
-  function sync(src, dst) {
+  function sync(src) {
     if (syncing) return;
     syncing = true;
     const srcMaxX = src.scrollWidth - src.clientWidth;
     const srcMaxY = src.scrollHeight - src.clientHeight;
-    const dstMaxX = dst.scrollWidth - dst.clientWidth;
-    const dstMaxY = dst.scrollHeight - dst.clientHeight;
-    dst.scrollLeft = srcMaxX > 0 ? (src.scrollLeft / srcMaxX) * dstMaxX : 0;
-    dst.scrollTop = srcMaxY > 0 ? (src.scrollTop / srcMaxY) * dstMaxY : 0;
+    panes.forEach(p => {
+      if (p.scroll === src) return;
+      const dstMaxX = p.scroll.scrollWidth - p.scroll.clientWidth;
+      const dstMaxY = p.scroll.scrollHeight - p.scroll.clientHeight;
+      p.scroll.scrollLeft = srcMaxX > 0 ? (src.scrollLeft / srcMaxX) * dstMaxX : 0;
+      p.scroll.scrollTop = srcMaxY > 0 ? (src.scrollTop / srcMaxY) * dstMaxY : 0;
+    });
     requestAnimationFrame(() => { syncing = false; });
   }
-  a.addEventListener('scroll', () => sync(a, b));
-  b.addEventListener('scroll', () => sync(b, a));
+  panes.forEach(p => p.scroll.addEventListener('scroll', () => sync(p.scroll)));
 
   const zoom = document.getElementById('zoom');
   const zoomVal = document.getElementById('zoom-val');
-  const imgA = document.getElementById('img-a');
-  const imgB = document.getElementById('img-b');
   function applyZoom() {
     const z = zoom.value;
-    imgA.style.transform = 'scale(' + z + ')';
-    imgB.style.transform = 'scale(' + z + ')';
+    panes.forEach(p => p.img.style.transform = 'scale(' + z + ')');
     zoomVal.textContent = Math.round(z * 100) + '%';
   }
   zoom.addEventListener('input', applyZoom);
   applyZoom();
 
   const buttons = document.querySelectorAll('button[data-view]');
-  const allPanes = document.querySelectorAll('.pane');
   buttons.forEach(btn => {
     btn.addEventListener('click', () => {
       buttons.forEach(b2 => b2.classList.remove('active'));
       btn.classList.add('active');
       const view = btn.dataset.view;
-      imgA.src = imgA.dataset[view];
-      imgB.src = imgB.dataset[view];
+      panes.forEach(p => { p.img.src = p.img.dataset[view]; });
       allPanes.forEach(p => {
         if (view === 'f6') p.classList.add('show-f6');
         else p.classList.remove('show-f6');
