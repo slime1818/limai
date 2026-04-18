@@ -141,8 +141,15 @@ def main() -> None:
                         help="Fixed seed for reproducibility (default: random)")
     parser.add_argument("--output-format", choices=["png", "jpeg"], default="png",
                         help="Output format (default: png)")
+    parser.add_argument("--num-images", type=int, choices=[1, 2, 3, 4], default=1,
+                        help="Number of variants per run (1-4, default 1 for "
+                             "backward-compat). N>=2 produces {stem}-v1, -v2, ... "
+                             "suffixed outputs and requires --yes.")
+    parser.add_argument("--yes", action="store_true",
+                        help="Required for --num-images >= 2 (cost-safety "
+                             "double-check).")
     parser.add_argument("--force", action="store_true",
-                        help="Overwrite existing output path (default: refuse)")
+                        help="Overwrite existing output path(s) (default: refuse).")
     args = parser.parse_args()
 
     if not os.environ.get("FAL_KEY"):
@@ -155,22 +162,44 @@ def main() -> None:
 
     prompt_text = _load_prompt(args)
 
-    output_path = Path(args.output)
-    meta_path = output_path.with_suffix(".meta.json")
+    # Build output paths (single or variant-suffixed)
+    output_base = Path(args.output)
+    if args.num_images == 1:
+        output_paths = [output_base]
+    else:
+        stem = output_base.stem
+        ext = output_base.suffix
+        parent = output_base.parent
+        output_paths = [parent / f"{stem}-v{i+1}{ext}"
+                        for i in range(args.num_images)]
 
-    if output_path.exists() and not args.force:
-        print(f"ERROR: output path already exists: {output_path}", file=sys.stderr)
-        print("  Pass --force to overwrite. Refusing to avoid duplicate charges "
-              "for the same filename.", file=sys.stderr)
+    # Cost-safety — multi-image run requires explicit --yes confirmation
+    if args.num_images > 1 and not args.yes:
+        total_cost = args.num_images * 0.075
+        print(f"ERROR: --num-images {args.num_images} will cost "
+              f"{args.num_images} x $0.075 = ${total_cost:.3f}.",
+              file=sys.stderr)
+        print("  Pass --yes to confirm multi-image run.", file=sys.stderr)
+        raise SystemExit(2)
+
+    # Existence safety — refuse if ANY target path exists without --force
+    existing = [p for p in output_paths if p.exists()]
+    if existing and not args.force:
+        print(f"ERROR: {len(existing)} output path(s) already exist:",
+              file=sys.stderr)
+        for p in existing:
+            print(f"  {p}", file=sys.stderr)
+        print("  Pass --force to overwrite. Refusing to avoid duplicate charges.",
+              file=sys.stderr)
         raise SystemExit(6)
 
-    output_path.parent.mkdir(parents=True, exist_ok=True)
+    output_base.parent.mkdir(parents=True, exist_ok=True)
 
     arguments = {
         "prompt": prompt_text,
         "image_size": {"width": TARGET_WIDTH, "height": TARGET_HEIGHT},
         "output_format": args.output_format,
-        "num_images": 1,
+        "num_images": args.num_images,
         "enable_safety_checker": True,
     }
     if args.seed is not None:
@@ -180,12 +209,21 @@ def main() -> None:
     print(f"fal.ai layer generation  ~  {MODEL_ID}")
     print(f"Requested size:  {TARGET_WIDTH}x{TARGET_HEIGHT}")
     print(f"Output format:   {args.output_format}")
-    print(f"Seed:            {'random (fal assigns)' if args.seed is None else args.seed}")
-    print(f"Output path:     {output_path}")
+    if args.num_images == 1:
+        print(f"Num images:      1")
+        print(f"Output path:     {output_paths[0]}")
+    else:
+        total_cost = args.num_images * 0.075
+        print(f"Num images:      {args.num_images}  (total ~${total_cost:.3f})")
+        print(f"Output paths:    {args.num_images} variants:")
+        for p in output_paths:
+            print(f"                 {p}")
+    print(f"Seed:            "
+          f"{'random (fal assigns)' if args.seed is None else args.seed}")
     print(f"Prompt tokens:   ~{len(prompt_text.split())} words, "
           f"{len(prompt_text)} chars")
-    if args.force and output_path.exists():
-        print("  [--force] will overwrite existing output")
+    if args.force and any(p.exists() for p in output_paths):
+        print("  [--force] will overwrite existing output(s)")
     print("=" * 72)
 
     start_iso = datetime.now(timezone.utc).isoformat(timespec="seconds")
@@ -222,69 +260,84 @@ def main() -> None:
         print(json.dumps(result, indent=2, default=str)[:2000], file=sys.stderr)
         raise SystemExit(4)
 
-    image_info = result["images"][0]
-    image_url = image_info.get("url")
-    returned_w = image_info.get("width")
-    returned_h = image_info.get("height")
-    returned_seed = result.get("seed")
-    content_type = image_info.get("content_type")
+    images = result.get("images", [])
+    if len(images) != args.num_images:
+        print(f"[WARN] requested {args.num_images} image(s), got {len(images)}",
+              file=sys.stderr)
 
-    print(f"\n[{elapsed:.1f}s] generation complete")
-    print(f"  returned dims:  {returned_w}x{returned_h} "
-          f"(requested {TARGET_WIDTH}x{TARGET_HEIGHT})")
-    print(f"  returned seed:  {returned_seed}")
-    print(f"  content-type:   {content_type}")
-    print(f"  image URL:      {image_url}")
+    top_seed = result.get("seed")
+    print(f"\n[{elapsed:.1f}s] generation complete "
+          f"({len(images)} image(s))")
 
-    if not image_url:
-        print("[ERROR] no image URL in response", file=sys.stderr)
-        raise SystemExit(4)
+    for idx, (image_info, output_path) in enumerate(
+        zip(images, output_paths), start=1
+    ):
+        image_url = image_info.get("url")
+        returned_w = image_info.get("width")
+        returned_h = image_info.get("height")
+        per_image_seed = image_info.get("seed", top_seed)
+        content_type = image_info.get("content_type")
 
-    dim_match = (returned_w == TARGET_WIDTH and returned_h == TARGET_HEIGHT)
-    if not dim_match:
-        print("\n[WARN] returned dimensions differ from request "
-              f"({returned_w}x{returned_h} vs "
-              f"{TARGET_WIDTH}x{TARGET_HEIGHT})", file=sys.stderr)
+        print(f"\n  [image {idx}/{len(images)}]")
+        print(f"    returned dims:  {returned_w}x{returned_h} "
+              f"(requested {TARGET_WIDTH}x{TARGET_HEIGHT})")
+        print(f"    returned seed:  {per_image_seed}")
+        print(f"    content-type:   {content_type}")
+        print(f"    image URL:      {image_url}")
 
-    print(f"\nDownloading to {output_path} ...")
-    try:
-        resp = requests.get(image_url, timeout=60)
-        resp.raise_for_status()
-        output_path.write_bytes(resp.content)
-    except Exception as e:
-        print(f"[ERROR] download failed: {e}", file=sys.stderr)
-        raise SystemExit(5)
+        if not image_url:
+            print(f"[ERROR] no image URL in image {idx}", file=sys.stderr)
+            raise SystemExit(4)
 
-    file_bytes = output_path.stat().st_size
-    file_mb = file_bytes / (1024 * 1024)
-    print(f"  saved: {file_bytes:,} bytes ({file_mb:.2f} MB)")
+        dim_match = (returned_w == TARGET_WIDTH and returned_h == TARGET_HEIGHT)
+        if not dim_match:
+            print(f"    [WARN] dim mismatch "
+                  f"({returned_w}x{returned_h} vs "
+                  f"{TARGET_WIDTH}x{TARGET_HEIGHT})", file=sys.stderr)
 
-    metadata = {
-        "model_id": MODEL_ID,
-        "requested_size": {"width": TARGET_WIDTH, "height": TARGET_HEIGHT},
-        "returned_size": {"width": returned_w, "height": returned_h},
-        "dimension_match": dim_match,
-        "seed": returned_seed,
-        "prompt": prompt_text,
-        "prompt_source": "file" if args.prompt_file else "cli",
-        "prompt_file": args.prompt_file,
-        "output_format_requested": args.output_format,
-        "content_type_returned": content_type,
-        "output_path": str(output_path),
-        "file_size_bytes": file_bytes,
-        "file_size_mb": round(file_mb, 3),
-        "start_utc": start_iso,
-        "elapsed_seconds": round(elapsed, 2),
-        "raw_response": result,
-    }
-    meta_path.write_text(
-        json.dumps(metadata, indent=2, default=str),
-        encoding="utf-8",
-    )
-    print(f"  metadata: {meta_path}")
+        print(f"    downloading to {output_path}")
+        try:
+            resp = requests.get(image_url, timeout=60)
+            resp.raise_for_status()
+            output_path.write_bytes(resp.content)
+        except Exception as e:
+            print(f"[ERROR] download {idx} failed: {e}", file=sys.stderr)
+            raise SystemExit(5)
 
+        file_bytes = output_path.stat().st_size
+        file_mb = file_bytes / (1024 * 1024)
+        print(f"    saved: {file_bytes:,} bytes ({file_mb:.2f} MB)")
+
+        meta_path = output_path.with_suffix(".meta.json")
+        metadata = {
+            "model_id": MODEL_ID,
+            "image_index": idx,
+            "num_images_requested": args.num_images,
+            "requested_size": {"width": TARGET_WIDTH, "height": TARGET_HEIGHT},
+            "returned_size": {"width": returned_w, "height": returned_h},
+            "dimension_match": dim_match,
+            "seed": per_image_seed,
+            "prompt": prompt_text,
+            "prompt_source": "file" if args.prompt_file else "cli",
+            "prompt_file": args.prompt_file,
+            "output_format_requested": args.output_format,
+            "content_type_returned": content_type,
+            "output_path": str(output_path),
+            "file_size_bytes": file_bytes,
+            "file_size_mb": round(file_mb, 3),
+            "start_utc": start_iso,
+            "elapsed_seconds": round(elapsed, 2),
+            "image_info": image_info,
+        }
+        meta_path.write_text(
+            json.dumps(metadata, indent=2, default=str),
+            encoding="utf-8",
+        )
+        print(f"    metadata: {meta_path}")
+
+    total_cost = args.num_images * 0.075
     print("\n" + "=" * 72)
-    print(f"OK — layer saved. Cost: ~$0.075. Seed to log: {returned_seed}")
+    print(f"OK — {len(images)} image(s) saved. Cost: ~${total_cost:.3f}.")
     print("=" * 72)
 
 

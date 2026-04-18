@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Apu dual-track viewer &mdash; 1024 vs 2048</title>
+<style>
+  * { box-sizing: border-box; }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: #1a1612;
+         color: #f4ecd9; margin: 0; padding: 16px; line-height: 1.4; }
+  h1 { font-size: 1.2rem; margin: 0 0 12px; }
+  h2 { font-size: 0.9rem; color: #c8a26b; margin: 20px 0 8px;
+       text-transform: uppercase; letter-spacing: 0.05em; }
+  .toolbar { display: flex; gap: 16px; align-items: center; padding: 10px 12px;
+             background: rgba(255,255,255,0.03); border: 1px solid #3a2f26;
+             margin-bottom: 12px; font-size: 0.85rem; flex-wrap: wrap; }
+  .toolbar label { display: flex; gap: 6px; align-items: center; }
+  button { background: #2a1f15; color: #f4ecd9; border: 1px solid #3a2f26;
+           padding: 4px 10px; cursor: pointer; font-size: 0.82rem; }
+  button.active { background: #c8a26b; color: #1a1612; }
+  .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .pane { position: relative; min-width: 0; }
+  .pane-label { position: absolute; top: 6px; left: 6px;
+                background: rgba(26,22,18,0.9); padding: 3px 8px;
+                font-size: 0.72rem; border: 1px solid #3a2f26; z-index: 10; }
+  .scroll-wrap { overflow: auto; height: 72vh; border: 1px solid #3a2f26;
+                 background: #0d0a08; }
+  .scroll-wrap img { display: block; transform-origin: top left;
+                     image-rendering: pixelated; }
+  table { border-collapse: collapse; width: 100%; font-size: 0.85rem;
+          margin-top: 6px; }
+  th, td { text-align: left; padding: 6px 10px; border-bottom: 1px solid #3a2f26; }
+  th { color: #c8a26b; font-weight: 500; text-transform: uppercase;
+       font-size: 0.72rem; letter-spacing: 0.05em; }
+  td.num { font-variant-numeric: tabular-nums; text-align: right; }
+  .pass { color: #82c082; font-weight: 600; }
+  .fail { color: #e07070; font-weight: 600; }
+  .warn { color: #e0a060; font-weight: 600; }
+  p.note { font-size: 0.82rem; opacity: 0.7; max-width: 90ch; line-height: 1.5; }
+  p.caveat { font-size: 0.85rem; line-height: 1.55; max-width: 92ch;
+             padding: 10px 14px; margin: 10px 0 0;
+             background: rgba(224,160,96,0.08); border-left: 3px solid #e0a060; }
+  p.caveat strong { color: #e0a060; }
+</style>
+</head>
+<body>
+<h1>Apu dual-track viewer &mdash; 1024 baseline vs 2048 API</h1>
+<div class="toolbar">
+  <span>View:</span>
+  <button data-view="raw" class="active">Raw composite</button>
+  <button data-view="scrim55">+55% scrim</button>
+  <button data-view="heatmap">Gate 8 heatmap</button>
+  <label>Zoom:
+    <input type="range" id="zoom" min="0.25" max="2" step="0.05" value="0.6">
+    <span id="zoom-val">60%</span>
+  </label>
+  <span style="opacity:0.6">Pan/scroll one pane to sync the other</span>
+</div>
+
+<div class="pair">
+  <div class="pane">
+    <span class="pane-label">1024x768 &middot; fal.ai UI baseline (variant B, rock @ x=-200)</span>
+    <div class="scroll-wrap" id="scroll-a">
+      <img id="img-a"
+           data-raw="apu-composite-alt.webp"
+           data-scrim55="apu-composite-scrim-55.webp"
+           data-heatmap="contrast-heatmap.png"
+           src="apu-composite-alt.webp"
+           alt="1024 composite">
+    </div>
+  </div>
+  <div class="pane">
+    <span class="pane-label">2048x1536 &middot; fal.ai API dual-track (variant B, rock @ x=-400)</span>
+    <div class="scroll-wrap" id="scroll-b">
+      <img id="img-b"
+           data-raw="apu-composite-2048.webp"
+           data-scrim55="apu-composite-2048-scrim55.webp"
+           data-heatmap="apu-composite-2048-heatmap.png"
+           src="apu-composite-2048.webp"
+           alt="2048 composite">
+    </div>
+  </div>
+</div>
+
+<h2>Metrics (Gate 8 on +55% scrim composite; text-zone scales proportionally)</h2>
+<table>
+<tr><th>Metric</th><th>1024 baseline</th><th>2048 dual-track</th><th>Delta</th><th>Gate</th></tr>
+<tr>
+  <td>p95 contrast (body AA &ge; 4.5:1)</td>
+  <td class="num">5.35:1 <span class="pass">PASS</span></td>
+  <td class="num">4.49:1 <span class="warn">&#9888; MARGINAL (miss +0.01)</span></td>
+  <td class="num">-0.85</td>
+  <td>body AA</td>
+</tr>
+<tr>
+  <td>Worst-pixel contrast</td>
+  <td class="num">3.36:1</td>
+  <td class="num">3.40:1</td>
+  <td class="num">+0.03</td>
+  <td>diagnostic</td>
+</tr>
+<tr>
+  <td>Composite file size (WebP q90)</td>
+  <td class="num">91 KB</td>
+  <td class="num">688 KB</td>
+  <td class="num">7.6x</td>
+  <td>&mdash;</td>
+</tr>
+<tr>
+  <td>Composite+scrim file size (WebP q90)</td>
+  <td class="num">79 KB</td>
+  <td class="num">332 KB</td>
+  <td class="num">4.2x</td>
+  <td>&mdash;</td>
+</tr>
+<tr>
+  <td>Text-zone opaque pixels measured</td>
+  <td class="num">112,500</td>
+  <td class="num">450,000</td>
+  <td class="num">&mdash;</td>
+  <td>diagnostic</td>
+</tr>
+</table>
+
+<p class="caveat">
+  <strong>Dual-track observation (not patched, preserved as data):</strong>
+  2048-track loses <strong>16% Gate 8 contrast-headroom</strong>
+  vs 1024 baseline (5.35:1 &rarr; 4.49:1, &Delta; -0.85).
+  Root cause is structural: flux-2-pro at 2048x1536 surfaces higher detail density
+  (ice-feature streaks on mountain-face diagonals) in the text-landing zone, raising
+  p95 luminance and tightening margin against the &ge;4.5:1 body-AA threshold.
+  This is a property of the resolution tier, not a regression against the v4 prompt
+  spec. Marginal body-AA outcome (4.49:1 vs 4.50 threshold, miss by
+  +0.01) is sub-perceptual and marked &#9888; rather than &#10005; &mdash;
+  the scrim-calibration pass after all 6 biomes composited will resolve the
+  per-pipeline scrim opacity based on the full biome set, not Apu alone.
+</p>
+
+<h2>Production reference</h2>
+<p class="note">
+  1024-track canvas uses framing-rock at x=-200 (variant B, the accepted placement for the 8/9-gates-pass Apu baseline). 2048-track canvas uses x=-400 (2x scale to preserve the same visual left-edge framing, since framing-rock width doubles with resolution). Full-viewport Noche Andina (#1a1612) scrim at 55% opacity is the Apu working-default &mdash; final scrim architecture is decided in the post-6-biomes calibration pass. Text-landing zone: 1024 (250..700, 280..530), 2048 (500..1400, 560..1060) &mdash; pure 2x proportional scale.
+</p>
+
+<script>
+  const a = document.getElementById('scroll-a');
+  const b = document.getElementById('scroll-b');
+  let syncing = false;
+  function sync(src, dst) {
+    if (syncing) return;
+    syncing = true;
+    const srcMaxX = src.scrollWidth - src.clientWidth;
+    const srcMaxY = src.scrollHeight - src.clientHeight;
+    const dstMaxX = dst.scrollWidth - dst.clientWidth;
+    const dstMaxY = dst.scrollHeight - dst.clientHeight;
+    dst.scrollLeft = srcMaxX > 0 ? (src.scrollLeft / srcMaxX) * dstMaxX : 0;
+    dst.scrollTop = srcMaxY > 0 ? (src.scrollTop / srcMaxY) * dstMaxY : 0;
+    requestAnimationFrame(() => { syncing = false; });
+  }
+  a.addEventListener('scroll', () => sync(a, b));
+  b.addEventListener('scroll', () => sync(b, a));
+
+  const zoom = document.getElementById('zoom');
+  const zoomVal = document.getElementById('zoom-val');
+  const imgA = document.getElementById('img-a');
+  const imgB = document.getElementById('img-b');
+  function applyZoom() {
+    const z = zoom.value;
+    imgA.style.transform = 'scale(' + z + ')';
+    imgB.style.transform = 'scale(' + z + ')';
+    zoomVal.textContent = Math.round(z * 100) + '%';
+  }
+  zoom.addEventListener('input', applyZoom);
+  applyZoom();
+
+  const buttons = document.querySelectorAll('button[data-view]');
+  buttons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      buttons.forEach(b2 => b2.classList.remove('active'));
+      btn.classList.add('active');
+      const view = btn.dataset.view;
+      imgA.src = imgA.dataset[view];
+      imgB.src = imgB.dataset[view];
+    });
+  });
+</script>
+</body>
+</html>

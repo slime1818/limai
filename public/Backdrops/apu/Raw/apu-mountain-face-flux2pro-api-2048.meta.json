@@ -1,0 +1,34 @@
+{
+  "model_id": "fal-ai/flux-2-pro",
+  "requested_size": {
+    "width": 2048,
+    "height": 1536
+  },
+  "returned_size": {
+    "width": 2048,
+    "height": 1536
+  },
+  "dimension_match": true,
+  "seed": 42,
+  "prompt": "extreme low-angle view of a massive mountain face, painterly digital illustration with soft gradient brushwork and subtle color transitions, avoiding hard flat shading or cartoon style, camera at ground level looking straight up at a towering Andean peak, the sheer mountain face fills 75 percent of the frame from bottom to top, peak apex at the very top edge of frame, narrow strip of pre-dawn sky visible only at top above the peak silhouette, no distant horizon, no other mountains, no establishing shot, close intimate view of one dominant peak, cold icy white and ice-blue mountain palette with warm rock undertones, consistent snow coverage across both sides of the mountain face, symmetrical snow patches on upper half and clean rock on lower half, golden dawn rim-light only on peak tip catching first sun, calm uniform tonal region at center-left of mountain face reserved for text overlay, narrow flat solid bright magenta color strip along bottom 10 percent of frame below mountain base for alpha extraction, dramatic close-up composition like a rock climber at the base of a cliff looking up, no humans, no text, no logos, no photorealism",
+  "output_format_requested": "png",
+  "content_type_returned": "image/png",
+  "output_path": "C:\\Users\\odear\\projects\\limai\\public\\Backdrops\\apu\\Raw\\apu-mountain-face-flux2pro-api-2048.png",
+  "file_size_bytes": 5680133,
+  "file_size_mb": 5.417,
+  "start_utc": "2026-04-18T12:18:44+00:00",
+  "elapsed_seconds": 19.3,
+  "raw_response": {
+    "images": [
+      {
+        "url": "https://v3b.fal.media/files/b/0a96bf12/gVelOASO4wE_xbWjxlpgc_5bqnE2Ib.png",
+        "content_type": "image/png",
+        "file_name": "gVelOASO4wE_xbWjxlpgc_5bqnE2Ib.png",
+        "file_size": null,
+        "width": 2048,
+        "height": 1536
+      }
+    ],
+    "seed": 42
+  }
+}

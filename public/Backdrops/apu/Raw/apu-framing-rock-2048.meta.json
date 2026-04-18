@@ -1,0 +1,36 @@
+{
+  "model_id": "fal-ai/flux-2-pro",
+  "requested_size": {
+    "width": 2048,
+    "height": 1536
+  },
+  "returned_size": {
+    "width": 2048,
+    "height": 1536
+  },
+  "dimension_match": true,
+  "seed": 1019610335,
+  "prompt": "extreme close-up of a tall vertical cliff face on the LEFT side of the frame, the dark painted cliff occupies only the LEFT 15 to 20 percent of the frame width, extending vertically from the very top edge of the frame down to the very bottom edge of the frame, rest of the frame on the RIGHT 80 percent is flat solid bright magenta background for alpha extraction, painterly digital illustration with painterly gradients and dramatic rim light and clean silhouettes, cliff surface is cold dark gray and dark bronze stone with organic jagged irregular asymmetric edges, warm golden dawn rim-light only on the rightward-facing edges of the cliff where morning sun just catches the rock, subtle Andean earth-tone undertones in lit edges, painterly soft tonal transitions within the cliff body, irregular asymmetric silhouette avoiding any symmetry, this is a close intimate view of stone at arms-length from the viewer, composition like standing beside a tall rock wall with the rest of the view stretching out to the right, no humans, no text, no logos, no mountains in distance, no sky visible, no ground, no landscape",
+  "prompt_source": "file",
+  "prompt_file": "prompts/apu-framing-rock-v4.txt",
+  "output_format_requested": "png",
+  "content_type_returned": "image/png",
+  "output_path": "public\\Backdrops\\apu\\Raw\\apu-framing-rock-2048.png",
+  "file_size_bytes": 4735527,
+  "file_size_mb": 4.516,
+  "start_utc": "2026-04-18T12:43:47+00:00",
+  "elapsed_seconds": 17.33,
+  "raw_response": {
+    "images": [
+      {
+        "url": "https://v3b.fal.media/files/b/0a96bfa8/3deod-z4b8DyD-I-zFTpI_2VvT6k4i.png",
+        "content_type": "image/png",
+        "file_name": "3deod-z4b8DyD-I-zFTpI_2VvT6k4i.png",
+        "file_size": null,
+        "width": 2048,
+        "height": 1536
+      }
+    ],
+    "seed": 1019610335
+  }
+}

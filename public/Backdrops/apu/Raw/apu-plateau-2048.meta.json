@@ -1,0 +1,36 @@
+{
+  "model_id": "fal-ai/flux-2-pro",
+  "requested_size": {
+    "width": 2048,
+    "height": 1536
+  },
+  "returned_size": {
+    "width": 2048,
+    "height": 1536
+  },
+  "dimension_match": true,
+  "seed": 1153145672,
+  "prompt": "DRAMATIC LOW-ANGLE composition, viewer stands on a narrow rocky Andean plateau at the base of a towering mountain, this painting shows ONLY the immediate foreground plateau \u2014 NO mountain, NO sky, NO distant elements, opaque painted band occupying only the bottom 12 to 15 percent of the frame, rest of the frame above is flat solid magenta background (pure chroma-key for alpha extraction), the plateau surface shows dark warm pre-dawn stone with faint dusting of snow, one or two small asymmetric rock formations at different positions providing scale cue for a human viewer, painterly soft tonal gradient from darker stone at the front edge to slightly hazier atmospheric stone at the back, painterly digital illustration with flat shading and painterly gradients and soft dramatic light and clean silhouettes, cold pre-dawn warmth in stone tones, subtle Andean earth-tone undertones in stone highlights and small rock rims, varied organic placement of rocks avoiding symmetry, no humans, no text, no logos, no distant landscape, no mountain visible, no sky visible",
+  "prompt_source": "file",
+  "prompt_file": "prompts/apu-plateau-v4.txt",
+  "output_format_requested": "png",
+  "content_type_returned": "image/png",
+  "output_path": "public\\Backdrops\\apu\\Raw\\apu-plateau-2048.png",
+  "file_size_bytes": 4963687,
+  "file_size_mb": 4.734,
+  "start_utc": "2026-04-18T12:41:22+00:00",
+  "elapsed_seconds": 22.64,
+  "raw_response": {
+    "images": [
+      {
+        "url": "https://v3b.fal.media/files/b/0a96bf9a/-VZgcGzwwe90SNZH0jfUG_5p8wP3Qi.png",
+        "content_type": "image/png",
+        "file_name": "-VZgcGzwwe90SNZH0jfUG_5p8wP3Qi.png",
+        "file_size": null,
+        "width": 2048,
+        "height": 1536
+      }
+    ],
+    "seed": 1153145672
+  }
+}
