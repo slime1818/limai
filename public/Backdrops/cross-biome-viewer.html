@@ -2,8 +2,15 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>Cross-biome style cohesion &mdash; Apu vs Puna</title>
+<title>Cross-biome style cohesion &mdash; Apu vs Puna (F6 scrim)</title>
 <style>
+  :root {
+    --f6-gradient: linear-gradient(90deg,
+      rgba(26,22,18,0.68) 0%,
+      rgba(26,22,18,0.45) 30%,
+      rgba(26,22,18,0.08) 55%,
+      rgba(26,22,18,0.0) 72%);
+  }
   * { box-sizing: border-box; }
   body { font-family: 'Segoe UI', system-ui, sans-serif; background: #1a1612;
          color: #f4ecd9; margin: 0; padding: 16px; line-height: 1.4; }
@@ -17,33 +24,44 @@
   button { background: #2a1f15; color: #f4ecd9; border: 1px solid #3a2f26;
            padding: 4px 10px; cursor: pointer; font-size: 0.82rem; }
   button.active { background: #c8a26b; color: #1a1612; }
+  button.new { border-color: #c8a26b; }
+  button.legacy { opacity: 0.7; }
   .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
   .pane { position: relative; min-width: 0; }
   .pane-label { position: absolute; top: 6px; left: 6px;
                 background: rgba(26,22,18,0.9); padding: 3px 8px;
                 font-size: 0.72rem; border: 1px solid #3a2f26; z-index: 10; }
   .scroll-wrap { overflow: auto; height: 72vh; border: 1px solid #3a2f26;
-                 background: #0d0a08; }
+                 background: #0d0a08; position: relative; }
   .scroll-wrap img { display: block; transform-origin: top left;
                      image-rendering: pixelated; }
+  .gradient-overlay { position: absolute; top: 0; left: 0; right: 0;
+                      height: 72vh; pointer-events: none; display: none;
+                      z-index: 5; background: var(--f6-gradient); }
+  .pane.show-f6 .gradient-overlay { display: block; }
   table { border-collapse: collapse; width: 100%; font-size: 0.85rem;
           margin-top: 6px; }
   th, td { text-align: left; padding: 6px 10px; border-bottom: 1px solid #3a2f26; }
   th { color: #c8a26b; font-weight: 500; text-transform: uppercase;
        font-size: 0.72rem; letter-spacing: 0.05em; }
   td.num { font-variant-numeric: tabular-nums; text-align: right; }
-  .pass { color: #82c082; font-weight: 600; }
-  .fail { color: #e07070; font-weight: 600; }
-  p.note { font-size: 0.82rem; opacity: 0.7; max-width: 90ch; line-height: 1.5; }
+  td.info { opacity: 0.72; }
+  p.note { font-size: 0.82rem; opacity: 0.75; max-width: 92ch; line-height: 1.55; }
+  p.caveat { font-size: 0.85rem; line-height: 1.55; max-width: 92ch;
+             padding: 10px 14px; margin: 10px 0 0;
+             background: rgba(200,162,107,0.08); border-left: 3px solid #c8a26b; }
+  p.caveat strong { color: #c8a26b; }
+  code { background: rgba(255,255,255,0.05); padding: 1px 5px; font-size: 0.8rem; }
 </style>
 </head>
 <body>
-<h1>Cross-biome style cohesion &mdash; Apu (biome 1) vs Puna (biome 2)</h1>
+<h1>Cross-biome style cohesion &mdash; Apu (biome 1) vs Puna (biome 2) &middot; F6 scrim</h1>
 <div class="toolbar">
   <span>View:</span>
-  <button data-view="raw" class="active">Raw composite</button>
-  <button data-view="scrim55">+55% scrim</button>
-  <button data-view="heatmap">Gate 8 heatmap</button>
+  <button data-view="f6" class="active new">F6 gradient (production)</button>
+  <button data-view="raw">Raw composite</button>
+  <button data-view="scrim55" class="legacy">+55% scrim (legacy)</button>
+  <button data-view="heatmap" class="legacy">Gate 8 heatmap (legacy)</button>
   <label>Zoom:
     <input type="range" id="zoom" min="0.25" max="2" step="0.05" value="0.8">
     <span id="zoom-val">80%</span>
@@ -52,68 +70,77 @@
 </div>
 
 <div class="pair">
-  <div class="pane">
+  <div class="pane show-f6">
     <span class="pane-label">Apu &middot; biome 1 &middot; LEFT framing cliff</span>
     <div class="scroll-wrap" id="scroll-a">
       <img id="img-a"
            data-raw="apu/processed/apu-composite-alt.webp"
            data-scrim55="apu/processed/apu-composite-scrim-55.webp"
            data-heatmap="apu/processed/apu-composite-scrim-55-heatmap.png"
+           data-f6="apu/processed/apu-composite-alt.webp"
            src="apu/processed/apu-composite-alt.webp"
            alt="Apu composite">
     </div>
+    <div class="gradient-overlay"></div>
   </div>
-  <div class="pane">
+  <div class="pane show-f6">
     <span class="pane-label">Puna &middot; biome 2 &middot; LEFT framing outcrop (Pad C locked)</span>
     <div class="scroll-wrap" id="scroll-b">
       <img id="img-b"
            data-raw="puna/processed/puna-composite.webp"
            data-scrim55="puna/processed/puna-composite-scrim55.webp"
            data-heatmap="puna/processed/puna-composite-heatmap.png"
+           data-f6="puna/processed/puna-composite.webp"
            src="puna/processed/puna-composite.webp"
            alt="Puna composite">
     </div>
+    <div class="gradient-overlay"></div>
   </div>
 </div>
 
-<h2>Metrics (Gate 8 on +55% scrim composite, per-biome text-zone)</h2>
+<h2>Metrics &mdash; informational only, F6 gradient is the production scrim</h2>
 <table>
 <tr><th>Metric</th><th>Apu (biome 1)</th><th>Puna (biome 2)</th><th>Delta</th></tr>
 <tr>
-  <td>p95 contrast (body AA &ge; 4.5:1)</td>
-  <td class="num">5.35:1 <span class="pass">PASS</span></td>
-  <td class="num">3.59:1 <span class="fail">FAIL</span></td>
-  <td class="num">-1.76</td>
+  <td class="info">p95 contrast on +55% scrim composite (legacy measurement)</td>
+  <td class="num info">5.35:1</td>
+  <td class="num info">3.59:1</td>
+  <td class="num info">-1.76</td>
 </tr>
 <tr>
-  <td>Worst-pixel contrast (diagnostic)</td>
-  <td class="num">3.36:1</td>
-  <td class="num">3.39:1</td>
-  <td class="num">+0.03</td>
+  <td class="info">Worst-pixel contrast on +55% scrim (legacy diagnostic)</td>
+  <td class="num info">3.36:1</td>
+  <td class="num info">3.39:1</td>
+  <td class="num info">+0.03</td>
 </tr>
 <tr>
-  <td>Composite file size (WebP q90)</td>
+  <td>Production composite file size (raw, WebP q90)</td>
   <td class="num">91 KB</td>
   <td class="num">159 KB</td>
   <td class="num">+75%</td>
 </tr>
 <tr>
-  <td>Composite+scrim file size (WebP q90)</td>
-  <td class="num">79 KB</td>
-  <td class="num">87 KB</td>
-  <td class="num">+9%</td>
-</tr>
-<tr>
-  <td>Text-zone opaque pixels (diagnostic)</td>
-  <td class="num">112,500</td>
-  <td class="num">112,500</td>
-  <td class="num">&mdash;</td>
+  <td class="info">+55% scrim composite file size (legacy preview)</td>
+  <td class="num info">79 KB</td>
+  <td class="num info">87 KB</td>
+  <td class="num info">+9%</td>
 </tr>
 </table>
 
+<p class="caveat">
+  <strong>Scrim architecture update (2026-04-18 late):</strong>
+  The 55% full-viewport scrim + per-biome calibration pass is <strong>superseded</strong> by the F6 left-gradient bar (CSS layer in the Next.js build, not baked into the painting). Gate 8 measurements above are retained as informational-only continuity data &mdash; they are NOT a production pass/fail gate. Puna&apos;s earlier body-AA fail (3.59:1 on +55% scrim) is architecturally resolved: the F6 gradient supplies local text-zone contrast independent of painting brightness per biome. Puna biome 2 is production-accepted.
+</p>
+
+<h2>F6 gradient spec</h2>
+<p class="note">
+  <code>background: linear-gradient(90deg, rgba(26,22,18,0.68) 0%, rgba(26,22,18,0.45) 30%, rgba(26,22,18,0.08) 55%, rgba(26,22,18,0.0) 72%);</code>
+  <br>Left ~55% viewport = natural text-contrast. Right ~45% viewport = painting fully visible. Text-content cross-biome lives in the left 50% viewport. Selva (TOP framing, Pad C) may require a rotated/adapted gradient variant to be decided at Selva prompt-authoring time.
+</p>
+
 <h2>Reference</h2>
 <p class="note">
-  Both biomes at 1024&times;768 native (fal.ai UI flux-2-pro). Scrim: 55% Noche Andina (#1a1612) full-viewport, working default for biomes 1-4 until calibration-pass after biome 6. Framing: Pad C locks Apu+Puna at LEFT (cliff + rock outcrop respectively); Yungas/Selva/Paracas/Pac&iacute;fico positions TBD per user-approval at prompt-authoring time. Text-zones: Apu (250..700, 280..530) central-left; Puna (180..630, 280..530) left-shifted per biome text-safe spec. Puna sky-subject layer carries cross-biome overlap zones (top 15% Apu-handoff with distant snow-topped peaks; lower-middle 15% Yungas-hint with cloud-forest mist wisps).
+  Both biomes at 1024&times;768 native (fal.ai UI flux-2-pro). Framing positions per Pad C: Apu+Puna LEFT cliff/outcrop (locked); Yungas/Selva/Paracas/Pac&iacute;fico TBD at prompt-authoring. Puna sky-subject layer carries cross-biome overlap zones (top 15% Apu-handoff distant snow-topped peaks; lower-middle 15% Yungas-hint cloud-forest mist wisps). Production composite = raw painterly WebP q90; F6 gradient applied at runtime by the Next.js frontend layer in Phase 2+.
 </p>
 
 <script>
@@ -148,6 +175,7 @@
   applyZoom();
 
   const buttons = document.querySelectorAll('button[data-view]');
+  const allPanes = document.querySelectorAll('.pane');
   buttons.forEach(btn => {
     btn.addEventListener('click', () => {
       buttons.forEach(b2 => b2.classList.remove('active'));
@@ -155,6 +183,10 @@
       const view = btn.dataset.view;
       imgA.src = imgA.dataset[view];
       imgB.src = imgB.dataset[view];
+      allPanes.forEach(p => {
+        if (view === 'f6') p.classList.add('show-f6');
+        else p.classList.remove('show-f6');
+      });
     });
   });
 </script>

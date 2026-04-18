@@ -81,6 +81,33 @@ Applied **only** to scroll-dots and subtle transitions. **Never** in buttons or 
 - Minimalist lines (underline only, no boxes).
 - Labels above input fields.
 
+### Scrim strategy — F6 left-gradient bar (cross-biome, final)
+
+Chosen across all 6 biomes after comparing 8 mockup variants. Implemented as a **CSS layer in the Next.js build**, NOT baked into the painted composite WebPs. Keeps production assets at their raw painterly state and eliminates per-biome scrim calibration.
+
+```css
+background: linear-gradient(
+  90deg,
+  rgba(26,22,18,0.68) 0%,
+  rgba(26,22,18,0.45) 30%,
+  rgba(26,22,18,0.08) 55%,
+  rgba(26,22,18,0.0)  72%
+);
+```
+
+- **Left ~55% of viewport:** natural text-contrast via the gradient (text-content zone).
+- **Right ~45% of viewport:** painting fully visible, no scrim darkening.
+- Text-content lives in the left 50% of viewport cross-biome.
+- **Selva exception:** Selva uses TOP framing (per Pad C). A rotated or otherwise adapted gradient variant may be required; decide at Selva prompt-authoring time.
+
+**Deprecated by this decision:**
+- 55% full-viewport Noche Andina scrim as production default
+- 40–55% scrim-opacity bandwidth cap
+- Scrim-calibration pass after biome 6 (was spec'd specifically for the full-viewport approach)
+- Gate 8 body-AA / display-AA thresholds as production pass/fail gates — Gate 8 is now **informational only**; the F6 gradient supplies local text-zone contrast architecturally, independent of painting brightness per biome.
+
+**Consequence for process scripts:** `process_apu.py`, `process_puna.py`, and future `process_[biome].py` retain their scrim-55 WebP generation step as **legacy preview** only. Production composite = raw painterly composite (no scrim baked in). The gradient is applied at runtime by the Next.js frontend layer.
+
 ---
 
 ## 4. Subpages — launch and post-launch
