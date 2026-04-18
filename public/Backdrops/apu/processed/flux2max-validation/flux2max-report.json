@@ -1,0 +1,56 @@
+{
+  "input_path": "C:\\Users\\odear\\projects\\limai\\public\\Backdrops\\apu\\Raw\\apu-mountain-face-flux2max-v1.jpg",
+  "baseline_path": "C:\\Users\\odear\\projects\\limai\\public\\Backdrops\\apu\\Raw\\apu-mountain-face.jpg",
+  "file_size": {
+    "source_dimensions": "1024x768",
+    "raw_bytes": 285423,
+    "raw_mb": 0.2722005844116211,
+    "webp_bytes": 69434,
+    "webp_mb": 0.06621742248535156,
+    "webp_path": "C:\\Users\\odear\\projects\\limai\\public\\Backdrops\\apu\\processed\\flux2max-validation\\apu-mountain-face-flux2max-v1@2x.webp",
+    "pass_": true,
+    "detail": "source 1024x768, raw PNG 0.27 MB, WebP q82 0.07 MB (target \u2264 1.7 MB)"
+  },
+  "chroma": {
+    "sampled_rgb": [
+      212,
+      18,
+      108
+    ],
+    "is_pinkish": false,
+    "total_chroma_pct": 0.0,
+    "bottom_band_coverage_pct": 0.0,
+    "vertical_centroid_normalized": 0.0,
+    "pass_": false,
+    "detail": "sampled chroma RGB(212, 18, 108), pinkish=False. bottom 15% band coverage 0.0% (\u226580%). total chroma 0.0%. vertical centroid y=0.00 (\u22650.8 = bottom-heavy)"
+  },
+  "subject": {
+    "method": "otsu-luminance-on-non-chroma",
+    "otsu_threshold": 0.2784313725490196,
+    "subject_dominance_pct": 73.2709248860677,
+    "painted_coverage_pct": 100.0,
+    "baseline_subject_dominance_pct": 45.7757314046224,
+    "delta_vs_baseline": 27.495193481445305,
+    "abs_pass": "True",
+    "rel_pass": "False",
+    "target_band_hit": "True",
+    "pass_": "False",
+    "mask_path": "C:\\Users\\odear\\projects\\limai\\public\\Backdrops\\apu\\processed\\flux2max-validation\\apu-mountain-face-flux2max-v1-subject-mask.png",
+    "detail": "Otsu on non-chroma luminance, threshold L=0.2784. new 73.3%, baseline 45.8%, \u0394 +27.5pp. rel \u00b15.0pp (binding): False. abs 65-80% (informational): True. target 70-75% hit (informational): True. painted coverage 100.0%. visual 70-75% confirmation via side-by-side HTML, not this metric. mask visualization: apu-mountain-face-flux2max-v1-subject-mask.png"
+  },
+  "contrast": {
+    "composite_path": "C:\\Users\\odear\\projects\\limai\\public\\Backdrops\\apu\\processed\\flux2max-validation\\apu-mountain-face-flux2max-v1-composite.webp",
+    "scrim_composite_path": "C:\\Users\\odear\\projects\\limai\\public\\Backdrops\\apu\\processed\\flux2max-validation\\apu-mountain-face-flux2max-v1-composite-scrim55.webp",
+    "heatmap_path": "C:\\Users\\odear\\projects\\limai\\public\\Backdrops\\apu\\processed\\flux2max-validation\\apu-mountain-face-flux2max-v1-composite-heatmap.png",
+    "p95_lum": 0.14394035487843063,
+    "max_lum": 0.21326539253235582,
+    "p95_contrast": 4.600899078272433,
+    "worst_contrast": 3.3893554766805694,
+    "body_pass": true,
+    "display_pass": true,
+    "pass_": true,
+    "detail": "composite 1024x768 (new flux-2-max mountain + existing plateau/framing @ x=-200). 55% full-viewport scrim applied. text-zone p95 luminance 0.1439, worst 0.2133. p95 contrast 4.60:1 (body 4.5:1 PASS, display 3.0:1 PASS). worst-px contrast 3.39:1 (diagnostic, not binding)"
+  },
+  "comparison_html": "C:\\Users\\odear\\projects\\limai\\public\\Backdrops\\apu\\processed\\flux2max-validation\\flux2max-comparison.html",
+  "overall_pass": "False"
+}

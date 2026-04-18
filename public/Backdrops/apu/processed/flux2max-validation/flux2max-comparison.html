@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Flux-2-max v1 — Gate 9 validation</title>
+<style>
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: #1a1612; color: #f4ecd9;
+         margin: 0; padding: 24px; line-height: 1.4; }
+  h1 { font-size: 1.4rem; margin-top: 0; }
+  h2 { font-size: 1rem; color: #c8a26b; margin: 28px 0 10px; text-transform: uppercase;
+        letter-spacing: 0.05em; }
+  p { max-width: 72ch; opacity: 0.75; font-size: 0.9rem; }
+  .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .pane { position: relative; }
+  .pane img { width: 100%; display: block; border: 1px solid #3a2f26; }
+  .pane .label { position: absolute; top: 8px; left: 8px; background: rgba(26,22,18,0.85);
+                  padding: 4px 10px; font-size: 0.75rem; border: 1px solid #3a2f26; }
+  table { border-collapse: collapse; width: 100%; font-size: 0.88rem; margin-bottom: 16px; }
+  th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid #3a2f26; }
+  th { color: #c8a26b; font-weight: 500; text-transform: uppercase; font-size: 0.75rem;
+        letter-spacing: 0.06em; }
+  td.num { font-variant-numeric: tabular-nums; }
+  .pass { color: #82c082; font-weight: 600; }
+  .fail { color: #e07070; font-weight: 600; }
+  .hist { display: flex; align-items: flex-end; gap: 1px; height: 100px;
+           background: rgba(255,255,255,0.03); padding: 8px; border: 1px solid #3a2f26; }
+  .hist .bar { flex: 1; min-height: 1px; }
+  .hist.base .bar { background: #8a9fb3; }
+  .hist.new .bar { background: #c8a26b; }
+  .legend { font-size: 0.8rem; opacity: 0.7; margin-top: 6px; }
+  .crop-row { margin-bottom: 16px; }
+  .crop-label { font-size: 0.85rem; color: #c8a26b; margin-bottom: 6px; }
+  .crop-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .verdict-banner { padding: 12px 16px; margin: 16px 0 24px; border: 1px solid;
+                     font-size: 1rem; letter-spacing: 0.05em; }
+  .verdict-banner.pass { border-color: #82c082; color: #82c082;
+                          background: rgba(130,192,130,0.08); }
+  .verdict-banner.fail { border-color: #e07070; color: #e07070;
+                          background: rgba(224,112,112,0.08); }
+</style>
+</head>
+<body>
+<h1>Flux-2-max v1 — Gate 9 validation</h1>
+<p>Baseline: flux-2-pro v4.2 (<code>apu-mountain-face.jpg</code>). New: flux-2-max v1
+(<code>apu-mountain-face-flux2max-v1.jpg</code>). Side-by-side voor painterly kwaliteit, subject rendering,
+chroma-strip integriteit, detail density in text-landing zone. Metrics below.</p>
+
+<div class="verdict-banner fail">
+  OVERALL: FAIL — one or more gates failed
+</div>
+
+<h2>Metrics</h2>
+<table>
+<tr><th>Criterion</th><th>Target</th><th>Measured</th><th>Verdict</th></tr>
+<tr><td>WebP q82 @2x file size</td><td>≤ 1.7 MB</td>
+    <td class="num">0.07 MB</td><td><span class="pass">PASS</span></td></tr>
+<tr><td>Raw PNG (informational)</td><td>—</td>
+    <td class="num">0.27 MB @ 1024x768</td><td>—</td></tr>
+<tr><td>Chroma bottom-band coverage <span style="opacity:0.7">(informational — not binding)</span></td>
+    <td>≥ 80% = "clean" signal</td>
+    <td class="num">0.0% (centroid y=0.00, sampled RGB(212, 18, 108))</td>
+    <td><span style="opacity:0.8">MUTED</span></td></tr>
+<tr><td>Subject-mass consistency vs baseline (Otsu)</td>
+    <td>Δ within ±5.0pp</td>
+    <td class="num">new 73.3%, baseline 45.8%, Δ +27.5pp</td>
+    <td><span class="fail">FAIL</span></td></tr>
+<tr><td style="opacity:0.7">↳ Visual 70–75% target (informational)</td>
+    <td style="opacity:0.7">abs 65–80% range</td>
+    <td class="num" style="opacity:0.7">73.3% (Otsu method proxy; verify via full-frame comparison)</td>
+    <td style="opacity:0.7">within Otsu-proxy range</td></tr>
+<tr><td>Composite + 55% scrim, p95 contrast (Gate 8)</td>
+    <td>body ≥ 4.5:1</td>
+    <td class="num">4.60:1 (worst-px 3.39:1)</td>
+    <td><span class="pass">PASS</span></td></tr>
+</table>
+
+<h2>Full-frame side-by-side</h2>
+<div class="pair">
+  <div class="pane"><span class="label">Baseline · flux-2-pro v4.2</span><img src="baseline-display.jpg"></div>
+  <div class="pane"><span class="label">New · flux-2-max v1</span><img src="new-display.jpg"></div>
+</div>
+
+<h2>Region crops</h2>
+<div class="crop-row"><div class="crop-label">Peak / sunrise apex (top-center)</div><div class="crop-pair"><div class="pane"><img src="crop-base-peak.jpg"></div><div class="pane"><img src="crop-new-peak.jpg"></div></div></div>
+<div class="crop-row"><div class="crop-label">Text-landing zone (center-left)</div><div class="crop-pair"><div class="pane"><img src="crop-base-text-landing.jpg"></div><div class="pane"><img src="crop-new-text-landing.jpg"></div></div></div>
+<div class="crop-row"><div class="crop-label">Mountain mid-face detail</div><div class="crop-pair"><div class="pane"><img src="crop-base-mountain.jpg"></div><div class="pane"><img src="crop-new-mountain.jpg"></div></div></div>
+<div class="crop-row"><div class="crop-label">Chroma-strip band (bottom)</div><div class="crop-pair"><div class="pane"><img src="crop-base-chroma-strip.jpg"></div><div class="pane"><img src="crop-new-chroma-strip.jpg"></div></div></div>
+
+
+<h2>Luminance distribution (non-weighted, full frame)</h2>
+<div class="pair">
+  <div>
+    <div style="font-size:0.85rem;opacity:0.75;margin-bottom:6px">Baseline · flux-2-pro v4.2</div>
+    <div class="hist base"><div class="bar" style="height:0.1%"></div><div class="bar" style="height:36.6%"></div><div class="bar" style="height:19.8%"></div><div class="bar" style="height:16.0%"></div><div class="bar" style="height:20.8%"></div><div class="bar" style="height:11.8%"></div><div class="bar" style="height:9.2%"></div><div class="bar" style="height:7.3%"></div><div class="bar" style="height:7.4%"></div><div class="bar" style="height:6.5%"></div><div class="bar" style="height:31.3%"></div><div class="bar" style="height:11.6%"></div><div class="bar" style="height:18.1%"></div><div class="bar" style="height:21.8%"></div><div class="bar" style="height:21.7%"></div><div class="bar" style="height:17.1%"></div><div class="bar" style="height:12.8%"></div><div class="bar" style="height:14.4%"></div><div class="bar" style="height:14.2%"></div><div class="bar" style="height:13.9%"></div><div class="bar" style="height:16.8%"></div><div class="bar" style="height:14.0%"></div><div class="bar" style="height:14.7%"></div><div class="bar" style="height:21.8%"></div><div class="bar" style="height:6.5%"></div><div class="bar" style="height:8.0%"></div><div class="bar" style="height:3.2%"></div><div class="bar" style="height:1.9%"></div><div class="bar" style="height:0.9%"></div><div class="bar" style="height:0.4%"></div><div class="bar" style="height:0.1%"></div><div class="bar" style="height:0.1%"></div><div class="bar" style="height:0.1%"></div><div class="bar" style="height:0.1%"></div><div class="bar" style="height:0.1%"></div><div class="bar" style="height:0.1%"></div><div class="bar" style="height:0.1%"></div><div class="bar" style="height:0.0%"></div><div class="bar" style="height:0.1%"></div><div class="bar" style="height:0.1%"></div><div class="bar" style="height:0.1%"></div><div class="bar" style="height:0.1%"></div><div class="bar" style="height:0.1%"></div><div class="bar" style="height:0.1%"></div><div class="bar" style="height:0.1%"></div><div class="bar" style="height:0.1%"></div><div class="bar" style="height:0.1%"></div><div class="bar" style="height:0.2%"></div><div class="bar" style="height:0.3%"></div><div class="bar" style="height:0.5%"></div></div>
+  </div>
+  <div>
+    <div style="font-size:0.85rem;opacity:0.75;margin-bottom:6px">New · flux-2-max v1</div>
+    <div class="hist new"><div class="bar" style="height:100.0%"></div><div class="bar" style="height:16.6%"></div><div class="bar" style="height:19.5%"></div><div class="bar" style="height:22.7%"></div><div class="bar" style="height:23.1%"></div><div class="bar" style="height:17.4%"></div><div class="bar" style="height:11.8%"></div><div class="bar" style="height:10.8%"></div><div class="bar" style="height:11.1%"></div><div class="bar" style="height:11.8%"></div><div class="bar" style="height:30.3%"></div><div class="bar" style="height:11.8%"></div><div class="bar" style="height:4.7%"></div><div class="bar" style="height:3.6%"></div><div class="bar" style="height:3.3%"></div><div class="bar" style="height:3.6%"></div><div class="bar" style="height:3.7%"></div><div class="bar" style="height:4.0%"></div><div class="bar" style="height:6.9%"></div><div class="bar" style="height:8.7%"></div><div class="bar" style="height:8.9%"></div><div class="bar" style="height:8.2%"></div><div class="bar" style="height:6.0%"></div><div class="bar" style="height:5.6%"></div><div class="bar" style="height:5.7%"></div><div class="bar" style="height:4.9%"></div><div class="bar" style="height:4.5%"></div><div class="bar" style="height:5.2%"></div><div class="bar" style="height:5.4%"></div><div class="bar" style="height:7.9%"></div><div class="bar" style="height:6.6%"></div><div class="bar" style="height:5.1%"></div><div class="bar" style="height:1.1%"></div><div class="bar" style="height:0.5%"></div><div class="bar" style="height:0.3%"></div><div class="bar" style="height:0.1%"></div><div class="bar" style="height:0.1%"></div><div class="bar" style="height:0.1%"></div><div class="bar" style="height:0.1%"></div><div class="bar" style="height:0.1%"></div><div class="bar" style="height:0.1%"></div><div class="bar" style="height:0.1%"></div><div class="bar" style="height:0.1%"></div><div class="bar" style="height:0.1%"></div><div class="bar" style="height:0.1%"></div><div class="bar" style="height:0.1%"></div><div class="bar" style="height:0.1%"></div><div class="bar" style="height:0.2%"></div><div class="bar" style="height:0.1%"></div><div class="bar" style="height:0.0%"></div></div>
+  </div>
+</div>
+<div class="legend">50 bins, luminance 0 (dark) → 100 (light). Similar shapes = similar tonal palette.
+Significant shift (e.g. new distribution pushed brighter) can indicate palette regression or loss
+of shadow depth.</div>
+
+<h2>Artifacts</h2>
+<ul>
+  <li>Subject-mask visualization: <a href="apu-mountain-face-flux2max-v1-subject-mask.png">apu-mountain-face-flux2max-v1-subject-mask.png</a></li>
+  <li>Composite (pre-scrim): <a href="apu-mountain-face-flux2max-v1-composite.webp">apu-mountain-face-flux2max-v1-composite.webp</a></li>
+  <li>Composite + 55% scrim: <a href="apu-mountain-face-flux2max-v1-composite-scrim55.webp">apu-mountain-face-flux2max-v1-composite-scrim55.webp</a></li>
+  <li>Contrast heatmap: <a href="apu-mountain-face-flux2max-v1-composite-heatmap.png">apu-mountain-face-flux2max-v1-composite-heatmap.png</a></li>
+  <li>WebP @2x: <a href="apu-mountain-face-flux2max-v1@2x.webp">apu-mountain-face-flux2max-v1@2x.webp</a></li>
+</ul>
+
+</body>
+</html>
