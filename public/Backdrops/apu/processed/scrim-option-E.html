@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<title>Option E — text-shadow + light scrim comparison</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=JetBrains+Mono:wght@400..600&display=swap" rel="stylesheet">
+<link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --fg: #f4ecd9;
+    --fg-dim: #a09a8e;
+    --accent: #CDAE7E;
+    --accent-2: #BF9049;
+    --noche: #1a1612;
+  }
+  * { box-sizing: border-box; }
+  body {
+    background: var(--noche);
+    color: var(--fg);
+    font-family: 'Satoshi', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    margin: 0;
+    padding: 32px 48px 80px;
+  }
+  h1 {
+    font-family: 'Fraunces', Georgia, serif;
+    font-variation-settings: 'opsz' 72, 'SOFT' 30;
+    font-weight: 700;
+    font-size: 32px;
+    letter-spacing: -0.01em;
+    margin: 0 0 8px;
+  }
+  .sub { color: var(--fg-dim); font-size: 14px; margin: 0 0 28px; line-height: 1.55; max-width: 900px; }
+  .row {
+    margin-bottom: 40px;
+    padding-bottom: 24px;
+    border-bottom: 1px dashed rgba(255,255,255,0.1);
+  }
+  .row-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 10px;
+  }
+  .label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--accent);
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 700;
+  }
+  .row h2 { font-size: 17px; margin: 0; font-weight: 600; }
+  .meta { color: var(--fg-dim); font-family: 'JetBrains Mono', monospace; font-size: 11px; }
+
+  .frame {
+    position: relative;
+    aspect-ratio: 4/3;
+    max-width: 1280px;
+    margin: 0 auto;
+    overflow: hidden;
+    border-radius: 6px;
+    background: #000;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+  }
+  .frame img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+  .scrim-35 { position: absolute; inset: 0; background:
+    radial-gradient(ellipse 50% 40% at 42% 52%, rgba(26,22,18,0.35) 0%, rgba(26,22,18,0.28) 60%, rgba(26,22,18,0) 100%);
+    pointer-events: none;
+  }
+  .scrim-55 { position: absolute; inset: 0; background:
+    radial-gradient(ellipse 55% 45% at 42% 52%, rgba(26,22,18,0.55) 0%, rgba(26,22,18,0.45) 65%, rgba(26,22,18,0) 100%);
+    pointer-events: none;
+  }
+
+  .txt {
+    position: absolute;
+    inset: 0;
+    padding: 0 28% 0 22%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    pointer-events: none;
+  }
+  .eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: rgba(244,236,217,0.82);
+    margin-bottom: 8px;
+  }
+  .display {
+    font-family: 'Fraunces', Georgia, serif;
+    font-variation-settings: 'opsz' 144, 'SOFT' 10;
+    font-weight: 700;
+    font-size: clamp(48px, 7vw, 96px);
+    line-height: 0.9;
+    letter-spacing: -0.03em;
+    color: var(--fg);
+    margin: 0 0 18px;
+  }
+  .body {
+    font-family: 'Satoshi', sans-serif;
+    font-weight: 400;
+    font-size: 17px;
+    line-height: 1.55;
+    color: var(--fg);
+    margin: 0;
+    max-width: 72%;
+  }
+
+  /* Option E shadow variants — display gets weaker shadow, body gets stronger */
+  .shadow-e .display {
+    text-shadow:
+      0 1px 4px rgba(26,22,18,0.75),
+      0 0 18px rgba(26,22,18,0.55);
+  }
+  .shadow-e .body {
+    text-shadow:
+      0 1px 3px rgba(26,22,18,0.85),
+      0 0 10px rgba(26,22,18,0.6);
+  }
+  .shadow-e .eyebrow {
+    text-shadow: 0 1px 3px rgba(26,22,18,0.9);
+  }
+
+  /* Stronger shadow test */
+  .shadow-strong .display {
+    text-shadow:
+      0 2px 6px rgba(26,22,18,0.9),
+      0 0 24px rgba(26,22,18,0.7);
+  }
+  .shadow-strong .body {
+    text-shadow:
+      0 2px 5px rgba(26,22,18,0.95),
+      0 0 14px rgba(26,22,18,0.75);
+  }
+  .shadow-strong .eyebrow {
+    text-shadow: 0 1px 4px rgba(26,22,18,0.95);
+  }
+
+  .legend {
+    margin: 0 0 28px;
+    padding: 16px 20px;
+    background: rgba(191,144,73,0.08);
+    border-left: 3px solid var(--accent-2);
+    border-radius: 4px;
+    font-size: 13px;
+    line-height: 1.65;
+    color: #d1ccbe;
+  }
+  .legend code { color: var(--accent); }
+</style>
+</head>
+<body>
+
+<h1>Option E — text-shadow + light scrim</h1>
+<p class="sub">Vier varianten op dezelfde Apu composite. Text-shadow creëert per-glyph dark halo die elimineert worst-case-pixel issue. Body (Satoshi 17px) + display (Fraunces ~96px) beide meegenomen.</p>
+
+<div class="legend">
+  Subtitle-industry technique: dark glyph halo via <code>text-shadow</code> geeft effectieve lokale contrast tussen glyph-stroke en direct aangrenzende pixels, ongeacht painting pixel eronder. Scrim is dan een milde backing-color, geen zware coverage. <strong style="color: var(--accent);">Display vs body test</strong>: display krijgt zwakkere shadow (zwaardere glyph-stroke heeft minder halo nodig), body zwaardere shadow (dunne stroke heeft scherpere halo nodig om te separateren).
+</div>
+
+<!-- ROW 1: Control - no scrim, no shadow -->
+<div class="row">
+  <div class="row-head">
+    <span class="label">Variant 1 · CONTROL · geen scrim, geen shadow</span>
+    <span class="meta">should read as hell to read</span>
+  </div>
+  <h2>Painting pur, text moet het vechten</h2>
+  <div class="frame">
+    <img src="apu-composite-alt.webp" alt="control">
+    <div class="txt">
+      <div class="eyebrow">§01 · Icy peak</div>
+      <h3 class="display" style="margin:0">Apu</h3>
+      <p class="body">Sites voor merken met iets te zeggen. Een studio uit Amsterdam met wortels in de Andes.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ROW 2: Option E light - 35% scrim + medium shadow -->
+<div class="row">
+  <div class="row-head">
+    <span class="label">Variant 2 · OPTION E LIGHT · 35% scrim + medium text-shadow</span>
+    <span class="meta">painting ~65% zichtbaar in text zone</span>
+  </div>
+  <h2>Painting grotendeels intact, text leesbaar via glyph-halo</h2>
+  <div class="frame">
+    <img src="apu-composite-alt.webp" alt="option E light">
+    <div class="scrim-35"></div>
+    <div class="txt shadow-e">
+      <div class="eyebrow">§01 · Icy peak</div>
+      <h3 class="display" style="margin:0">Apu</h3>
+      <p class="body">Sites voor merken met iets te zeggen. Een studio uit Amsterdam met wortels in de Andes.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ROW 3: Option E strong - 35% scrim + strong shadow -->
+<div class="row">
+  <div class="row-head">
+    <span class="label">Variant 3 · OPTION E STRONG · 35% scrim + heavy text-shadow</span>
+    <span class="meta">painting ~65% zichtbaar, text bombproof readable</span>
+  </div>
+  <h2>Sterkere shadow voor worst-case-pixel zekerheid</h2>
+  <div class="frame">
+    <img src="apu-composite-alt.webp" alt="option E strong">
+    <div class="scrim-35"></div>
+    <div class="txt shadow-strong">
+      <div class="eyebrow">§01 · Icy peak</div>
+      <h3 class="display" style="margin:0">Apu</h3>
+      <p class="body">Sites voor merken met iets te zeggen. Een studio uit Amsterdam met wortels in de Andes.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ROW 4: Option C - 55% scrim, no shadow (for direct comparison) -->
+<div class="row">
+  <div class="row-head">
+    <span class="label">Variant 4 · OPTION C · 55% scrim, geen text-shadow</span>
+    <span class="meta">painting ~45% zichtbaar, scrim doet al het werk</span>
+  </div>
+  <h2>Jouw voorgestelde C, ter vergelijking</h2>
+  <div class="frame">
+    <img src="apu-composite-alt.webp" alt="option C 55%">
+    <div class="scrim-55"></div>
+    <div class="txt">
+      <div class="eyebrow">§01 · Icy peak</div>
+      <h3 class="display" style="margin:0">Apu</h3>
+      <p class="body">Sites voor merken met iets te zeggen. Een studio uit Amsterdam met wortels in de Andes.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Detailed analysis box -->
+<div class="legend" style="margin-top: 32px;">
+  <strong style="color: var(--accent);">Wat te letten:</strong><br>
+  1. In Variant 3 (E strong) — is de body-manifesto onder "Apu" even leesbaar als in Variant 4 (C 55%)? Als ja: E is objectief beter, want painting blijft ~20% meer zichtbaar.<br>
+  2. In Variant 3 — is er een visibele "glow" om de letters die de cinematic-rust breekt? Als ja, verzwakken we shadow of gaan terug naar E light (Variant 2).<br>
+  3. Variant 1 toont WAAROM we iets moeten doen — niets is geen optie.<br>
+  4. De display "Apu" zou in alle 3 behalve Variant 1 goed leesbaar moeten zijn, omdat 96px glyph-stroke inherent display-AA haalt.
+</div>
+
+</body>
+</html>

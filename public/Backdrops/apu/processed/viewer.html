@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<title>Apu v4 composite preview</title>
+<style>
+  body {
+    background: #1a1612;
+    color: #f4ecd9;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    margin: 0;
+    padding: 32px 48px;
+  }
+  h1 {
+    font-family: Georgia, serif;
+    font-weight: 700;
+    font-size: 32px;
+    letter-spacing: -0.01em;
+    margin: 0 0 8px;
+  }
+  .subtitle {
+    color: #a09a8e;
+    font-size: 14px;
+    margin: 0 0 32px;
+  }
+  .variant {
+    margin: 32px 0 40px;
+  }
+  .variant-header {
+    display: flex;
+    align-items: baseline;
+    gap: 18px;
+    margin-bottom: 10px;
+  }
+  .label {
+    font-size: 11px;
+    color: #CDAE7E;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 700;
+  }
+  .variant h2 {
+    font-size: 18px;
+    margin: 0;
+    font-weight: 600;
+  }
+  .meta {
+    font-size: 12px;
+    color: #8a8472;
+    font-family: ui-monospace, monospace;
+    margin-top: 6px;
+  }
+  .composite {
+    width: 100%;
+    max-width: 1024px;
+    border: 1px solid rgba(255,255,255,0.1);
+    display: block;
+    margin-top: 8px;
+    background: #0c0c0b;
+  }
+  .layers {
+    margin-top: 48px;
+    padding-top: 32px;
+    border-top: 1px dashed rgba(255,255,255,0.15);
+  }
+  .layers h2 {
+    font-size: 14px;
+    color: #CDAE7E;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 700;
+    margin: 0 0 16px;
+  }
+  .layer-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+  .layer {
+    background: #0c0c0b;
+    border: 1px solid rgba(255,255,255,0.08);
+    padding: 12px;
+  }
+  .layer h3 {
+    font-size: 11px;
+    color: #CDAE7E;
+    letter-spacing: 0.15em;
+    font-family: ui-monospace, monospace;
+    margin: 0 0 8px;
+    font-weight: 700;
+  }
+  .layer img {
+    width: 100%;
+    display: block;
+    background:
+      linear-gradient(45deg, #242220 25%, transparent 25%, transparent 75%, #242220 75%) 0 0 / 20px 20px,
+      linear-gradient(45deg, #242220 25%, transparent 25%, transparent 75%, #242220 75%) 10px 10px / 20px 20px,
+      #181614;
+  }
+  .layer-meta {
+    font-size: 11px;
+    color: #8a8472;
+    font-family: ui-monospace, monospace;
+    margin-top: 6px;
+  }
+  .recommendation {
+    margin-top: 20px;
+    padding: 16px 20px;
+    background: rgba(191,144,73,0.08);
+    border: 1px solid rgba(191,144,73,0.3);
+    border-radius: 6px;
+    font-size: 13px;
+    line-height: 1.6;
+    color: #d1ccbe;
+  }
+</style>
+</head>
+<body>
+
+<h1>Apu v4 composite preview</h1>
+<p class="subtitle">Gate 7 (composite) visual QA. Alle drie variants tonen dezelfde mountain-face en plateau — verschil zit in positie van het framing-rock layer.</p>
+
+<div class="variant">
+  <div class="variant-header">
+    <span class="label">Variant A · x=-512 (literal spec)</span>
+  </div>
+  <h2>Rock volledig off-screen</h2>
+  <img src="apu-composite.webp" alt="composite x=-512" class="composite">
+  <div class="meta">Rock @ x=-512 → 0 opaque px op canvas. Rock zat in source left 40%; bij -512 shift valt alles buiten het zichtbare gebied.</div>
+</div>
+
+<div class="variant">
+  <div class="variant-header">
+    <span class="label">Variant B · x=-200 (alt)</span>
+  </div>
+  <h2>Rock als partial framing</h2>
+  <img src="apu-composite-alt.webp" alt="composite x=-200" class="composite">
+  <div class="meta">Rock @ x=-200 → ~161k opaque px. Rock ~20% off-screen links, rest frameert het linker deel.</div>
+</div>
+
+<div class="variant">
+  <div class="variant-header">
+    <span class="label">Variant C · x=0 (fully visible)</span>
+  </div>
+  <h2>Rock volledig binnen frame</h2>
+  <img src="apu-composite-x0.webp" alt="composite x=0" class="composite">
+  <div class="meta">Rock @ x=0 → ~315k opaque px. Rock volledig zichtbaar, neemt linker 40% van frame in.</div>
+</div>
+
+<div class="recommendation">
+  <strong style="color: #CDAE7E;">Mijn inschatting:</strong> Variant B (x=-200) geeft het "ik sta naast een cliff die doorloopt buiten beeld" gevoel het sterkst — dat is het framing effect dat we wilden. Variant C is mooi maar de rock voelt dan als een <em>object in het frame</em>, niet als een <em>edge-voorbij-zicht-moment</em>. Variant A is leeg (rock onzichtbaar). Als B te veel ruimte afsnijdt (text-safe zone voor "Apu" toponym wordt te klein), proberen we x=-120 of x=-80.
+</div>
+
+<div class="layers">
+  <h2>Individual processed layers (alpha channels zichtbaar op checkerboard)</h2>
+  <div class="layer-grid">
+    <div class="layer">
+      <h3>apu-mountain-face.webp</h3>
+      <img src="apu-mountain-face.webp" alt="mountain face layer">
+      <div class="layer-meta">100% opaque · 44.4 KB · no chroma detected</div>
+    </div>
+    <div class="layer">
+      <h3>apu-plateau.webp</h3>
+      <img src="apu-plateau.webp" alt="plateau layer">
+      <div class="layer-meta">32.5% opaque · 33.0 KB · chroma RGB(218,57,150) removed</div>
+    </div>
+    <div class="layer">
+      <h3>apu-framing-rock.webp</h3>
+      <img src="apu-framing-rock.webp" alt="framing rock layer">
+      <div class="layer-meta">40.2% opaque · 24.8 KB · chroma RGB(251,5,183) removed</div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<title>Apu scrim variants — Gate 8 resolution</title>
+<style>
+  :root {
+    --fg: #f4ecd9;
+    --fg-dim: #a09a8e;
+    --accent: #CDAE7E;
+    --accent-2: #BF9049;
+  }
+  * { box-sizing: border-box; }
+  body {
+    background: #1a1612;
+    color: var(--fg);
+    font-family: -apple-system, "Segoe UI", sans-serif;
+    margin: 0;
+    padding: 28px 40px 64px;
+  }
+  h1 {
+    font-family: Georgia, serif;
+    font-weight: 700;
+    font-size: 30px;
+    letter-spacing: -0.01em;
+    margin: 0 0 6px;
+  }
+  .subtitle { color: var(--fg-dim); font-size: 14px; margin: 0 0 24px; }
+
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+  }
+  .variant { background: #0c0c0b; border: 1px solid rgba(255,255,255,0.06); border-radius: 8px; overflow: hidden; }
+  .variant.recommended { border-color: var(--accent-2); }
+
+  .variant-head {
+    padding: 14px 18px 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+  .label {
+    font-size: 10px;
+    color: var(--accent);
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 800;
+  }
+  .verdict {
+    font-size: 11px;
+    font-family: ui-monospace, monospace;
+    padding: 3px 8px;
+    border-radius: 3px;
+  }
+  .verdict.pass { background: rgba(70,170,70,0.2); color: #a8e0a8; }
+  .verdict.partial { background: rgba(220,150,40,0.2); color: #e8c488; }
+  .verdict.fail { background: rgba(180,60,60,0.2); color: #e89090; }
+
+  .frame {
+    position: relative;
+    aspect-ratio: 4/3;
+    background: #000;
+    overflow: hidden;
+  }
+  .frame img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+  .overlay-text {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    padding: 0 30% 0 22%;
+    pointer-events: none;
+  }
+  .overlay-text .eyebrow {
+    font-family: ui-monospace, monospace;
+    font-size: 9px;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: rgba(244,236,217,0.72);
+    margin-bottom: 4px;
+  }
+  .overlay-text h2 {
+    font-family: Georgia, serif;
+    font-weight: 700;
+    font-size: clamp(36px, 6vw, 66px);
+    line-height: 0.92;
+    letter-spacing: -0.03em;
+    color: #f4ecd9;
+    margin: 0 0 10px;
+    text-shadow: 0 1px 14px rgba(0,0,0,0.18);
+  }
+  .overlay-text p {
+    font-size: 12px;
+    line-height: 1.5;
+    color: rgba(244,236,217,0.9);
+    margin: 0;
+    max-width: 74%;
+  }
+
+  .meta { padding: 12px 18px 16px; font-size: 12px; color: var(--fg-dim); font-family: ui-monospace, monospace; line-height: 1.7; }
+  .meta strong { color: var(--accent); font-weight: 700; }
+  .meta .pass { color: #a8e0a8; }
+  .meta .fail { color: #e89090; }
+
+  .key {
+    margin: 36px 0 0;
+    padding: 16px 20px;
+    background: rgba(191,144,73,0.08);
+    border-left: 3px solid var(--accent-2);
+    border-radius: 4px;
+    font-size: 13px;
+    line-height: 1.6;
+    color: #d1ccbe;
+  }
+</style>
+</head>
+<body>
+
+<h1>Apu + scrim variants</h1>
+<p class="subtitle">Scrim = rendering-time dark gradient achter text, NIET in de backdrop-asset gebakken. Gate 8 WCAG worst-case-pixel tegen <code>#f4ecd9</code>. Mock text placed waar Apu's hero sectie landt.</p>
+
+<div class="grid">
+
+  <div class="variant">
+    <div class="variant-head">
+      <span class="label">Variant 0 · NO SCRIM</span>
+      <span class="verdict fail">FAIL</span>
+    </div>
+    <div class="frame">
+      <img src="apu-composite-alt.webp" alt="no scrim">
+      <div class="overlay-text">
+        <div>
+          <div class="eyebrow">§01 · Icy peak</div>
+          <h2>Apu</h2>
+          <p>Sites voor merken met iets te zeggen.</p>
+        </div>
+      </div>
+    </div>
+    <div class="meta">
+      p95 ctr <span class="fail">1.68:1</span> · worst <span class="fail">1.16:1</span><br>
+      <strong>Body 4.5:1</strong> FAIL · <strong>Display 3:1</strong> FAIL
+    </div>
+  </div>
+
+  <div class="variant">
+    <div class="variant-head">
+      <span class="label">Variant 40 · 40% scrim</span>
+      <span class="verdict fail">BODY FAIL</span>
+    </div>
+    <div class="frame">
+      <img src="apu-composite-scrim-40.webp" alt="40% scrim">
+      <div class="overlay-text">
+        <div>
+          <div class="eyebrow">§01 · Icy peak</div>
+          <h2>Apu</h2>
+          <p>Sites voor merken met iets te zeggen.</p>
+        </div>
+      </div>
+    </div>
+    <div class="meta">
+      p95 ctr 3.77:1 · worst <span class="fail">2.21:1</span><br>
+      <strong>Body 4.5:1</strong> FAIL · <strong>Display 3:1</strong> FAIL (worst)
+    </div>
+  </div>
+
+  <div class="variant">
+    <div class="variant-head">
+      <span class="label">Variant 55 · 55% scrim</span>
+      <span class="verdict partial">DISP ONLY</span>
+    </div>
+    <div class="frame">
+      <img src="apu-composite-scrim-55.webp" alt="55% scrim">
+      <div class="overlay-text">
+        <div>
+          <div class="eyebrow">§01 · Icy peak</div>
+          <h2>Apu</h2>
+          <p>Sites voor merken met iets te zeggen.</p>
+        </div>
+      </div>
+    </div>
+    <div class="meta">
+      p95 ctr 5.35:1 · worst <span class="fail">3.42:1</span><br>
+      <strong>Body 4.5:1</strong> FAIL (worst) · <strong>Display 3:1</strong> PASS
+    </div>
+  </div>
+
+  <div class="variant recommended">
+    <div class="variant-head">
+      <span class="label">Variant 70 · 70% scrim · AANBEVOLEN</span>
+      <span class="verdict pass">BODY PASS</span>
+    </div>
+    <div class="frame">
+      <img src="apu-composite-scrim-70.webp" alt="70% scrim">
+      <div class="overlay-text">
+        <div>
+          <div class="eyebrow">§01 · Icy peak</div>
+          <h2>Apu</h2>
+          <p>Sites voor merken met iets te zeggen.</p>
+        </div>
+      </div>
+    </div>
+    <div class="meta">
+      p95 ctr <span class="pass">7.76:1</span> · worst <span class="pass">4.91:1</span><br>
+      <strong>Body 4.5:1</strong> PASS · <strong>Display 3:1</strong> PASS
+    </div>
+  </div>
+
+  <div class="variant">
+    <div class="variant-head">
+      <span class="label">Variant 85 · 85% scrim</span>
+      <span class="verdict pass">BODY PASS (overkill)</span>
+    </div>
+    <div class="frame">
+      <img src="apu-composite-scrim-85.webp" alt="85% scrim">
+      <div class="overlay-text">
+        <div>
+          <div class="eyebrow">§01 · Icy peak</div>
+          <h2>Apu</h2>
+          <p>Sites voor merken met iets te zeggen.</p>
+        </div>
+      </div>
+    </div>
+    <div class="meta">
+      p95 ctr <span class="pass">11.20:1</span> · worst <span class="pass">7.03:1</span><br>
+      <strong>Body 4.5:1</strong> PASS · <strong>Display 3:1</strong> PASS · painting voelt verduisterd
+    </div>
+  </div>
+
+</div>
+
+<div class="key">
+  <strong style="color: var(--accent);">Mijn stem: 70% scrim (AANBEVOLEN variant).</strong> Dit is de minimum waarde die worst-case-pixel body AA haalt (4.91:1). 55% is aesthetic verleidelijk maar zakt door 4.5 body op worst-case (3.42) — marginaal voor accessibility. 85% darkens teveel van de painting. <br><br>
+  <strong style="color: var(--accent);">Architecturaal:</strong> scrim is een rendering-time laag (CSS <code>linear-gradient</code> in een <code>::before</code> of een R3F plane met alpha onder de text). De backdrop-asset <code>apu-mountain-face.webp</code> blijft ongewijzigd — scrim opacity/gradient kan per biome worden getuned in de design system.<br><br>
+  <strong style="color: var(--accent);">Gate 8:</strong> PASS met 70% scrim. Alle 9 Apu gates nu groen.
+</div>
+
+</body>
+</html>
