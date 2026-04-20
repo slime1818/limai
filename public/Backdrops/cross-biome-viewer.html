@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>Cross-biome style cohesion &mdash; Apu vs Puna vs Yungas (F6 scrim)</title>
+<title>Cross-biome style cohesion &mdash; Apu vs Puna vs Yungas vs Selva (F6 scrim)</title>
 <style>
   :root {
     --f6-gradient: linear-gradient(90deg,
@@ -14,7 +14,7 @@
   * { box-sizing: border-box; }
   body { font-family: 'Segoe UI', system-ui, sans-serif; background: #1a1612;
          color: #f4ecd9; margin: 0; padding: 16px; line-height: 1.4; }
-  h1 { font-size: 1.2rem; margin: 0 0 12px; }
+  h1 { font-size: 1.15rem; margin: 0 0 12px; }
   h2 { font-size: 0.9rem; color: #c8a26b; margin: 20px 0 8px;
        text-transform: uppercase; letter-spacing: 0.05em; }
   .toolbar { display: flex; gap: 16px; align-items: center; padding: 10px 12px;
@@ -26,23 +26,19 @@
   button.active { background: #c8a26b; color: #1a1612; }
   button.new { border-color: #c8a26b; }
   button.legacy { opacity: 0.7; }
-  .trio { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; }
-  @media (max-width: 1100px) {
-    .trio { grid-template-columns: 1fr 1fr; }
-  }
-  @media (max-width: 720px) {
-    .trio { grid-template-columns: 1fr; }
-  }
+  .quartet { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 6px; }
+  @media (max-width: 1400px) { .quartet { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 720px)  { .quartet { grid-template-columns: 1fr; } }
   .pane { position: relative; min-width: 0; }
   .pane-label { position: absolute; top: 6px; left: 6px;
                 background: rgba(26,22,18,0.9); padding: 3px 8px;
-                font-size: 0.7rem; border: 1px solid #3a2f26; z-index: 10; }
-  .scroll-wrap { overflow: auto; height: 70vh; border: 1px solid #3a2f26;
+                font-size: 0.68rem; border: 1px solid #3a2f26; z-index: 10; }
+  .scroll-wrap { overflow: auto; height: 62vh; border: 1px solid #3a2f26;
                  background: #0d0a08; position: relative; }
   .scroll-wrap img { display: block; transform-origin: top left;
                      image-rendering: pixelated; }
   .gradient-overlay { position: absolute; top: 0; left: 0; right: 0;
-                      height: 70vh; pointer-events: none; display: none;
+                      height: 62vh; pointer-events: none; display: none;
                       z-index: 5; background: var(--f6-gradient); }
   .pane.show-f6 .gradient-overlay { display: block; }
   table { border-collapse: collapse; width: 100%; font-size: 0.85rem;
@@ -61,7 +57,7 @@
 </style>
 </head>
 <body>
-<h1>Cross-biome style cohesion &mdash; Apu (1) vs Puna (2) vs Yungas (3) &middot; F6 scrim</h1>
+<h1>Cross-biome style cohesion &mdash; Apu (1) &middot; Puna (2) &middot; Yungas (3) &middot; Selva (4) &middot; F6 scrim</h1>
 <div class="toolbar">
   <span>View:</span>
   <button data-view="f6" class="active new">F6 gradient (production)</button>
@@ -69,15 +65,15 @@
   <button data-view="scrim55" class="legacy">+55% scrim (legacy)</button>
   <button data-view="heatmap" class="legacy">Gate 8 heatmap (legacy)</button>
   <label>Zoom:
-    <input type="range" id="zoom" min="0.25" max="2" step="0.05" value="0.7">
-    <span id="zoom-val">70%</span>
+    <input type="range" id="zoom" min="0.25" max="2" step="0.05" value="0.6">
+    <span id="zoom-val">60%</span>
   </label>
-  <span style="opacity:0.6">Pan/scroll one pane to sync the others</span>
+  <span style="opacity:0.6">Scroll one pane to sync the others</span>
 </div>
 
-<div class="trio">
+<div class="quartet">
   <div class="pane show-f6">
-    <span class="pane-label">Apu &middot; biome 1 &middot; LEFT cliff</span>
+    <span class="pane-label">Apu &middot; 1 &middot; LEFT cliff</span>
     <div class="scroll-wrap" id="scroll-a">
       <img id="img-a"
            data-raw="apu/processed/apu-composite-alt.webp"
@@ -90,7 +86,7 @@
     <div class="gradient-overlay"></div>
   </div>
   <div class="pane show-f6">
-    <span class="pane-label">Puna &middot; biome 2 &middot; LEFT outcrop</span>
+    <span class="pane-label">Puna &middot; 2 &middot; LEFT outcrop</span>
     <div class="scroll-wrap" id="scroll-b">
       <img id="img-b"
            data-raw="puna/processed/puna-composite.webp"
@@ -103,7 +99,7 @@
     <div class="gradient-overlay"></div>
   </div>
   <div class="pane show-f6">
-    <span class="pane-label">Yungas &middot; biome 3 &middot; RIGHT trunk (Pad C mirror)</span>
+    <span class="pane-label">Yungas &middot; 3 &middot; RIGHT trunk (Pad C 1st)</span>
     <div class="scroll-wrap" id="scroll-c">
       <img id="img-c"
            data-raw="yungas/processed/yungas-composite.webp"
@@ -115,56 +111,67 @@
     </div>
     <div class="gradient-overlay"></div>
   </div>
+  <div class="pane show-f6">
+    <span class="pane-label">Selva &middot; 4 &middot; TOP canopy (Pad C 2nd)</span>
+    <div class="scroll-wrap" id="scroll-d">
+      <img id="img-d"
+           data-raw="selva/processed/selva-composite.webp"
+           data-scrim55="selva/processed/selva-composite-scrim55.webp"
+           data-heatmap="selva/processed/selva-composite-heatmap.png"
+           data-f6="selva/processed/selva-composite.webp"
+           src="selva/processed/selva-composite.webp"
+           alt="Selva composite">
+    </div>
+    <div class="gradient-overlay"></div>
+  </div>
 </div>
 
 <h2>Metrics &mdash; informational only, F6 gradient is the production scrim</h2>
 <table>
-<tr><th>Metric</th><th>Apu (1)</th><th>Puna (2)</th><th>Yungas (3)</th></tr>
+<tr><th>Metric</th><th>Apu (1)</th><th>Puna (2)</th><th>Yungas (3)</th><th>Selva (4)</th></tr>
 <tr>
   <td class="info">p95 contrast on +55% scrim composite (legacy)</td>
   <td class="num info">5.35:1</td>
   <td class="num info">3.58:1</td>
-  <td class="num info">5.91:1</td>
+  <td class="num info">5.89:1</td>
+  <td class="num info">6.93:1</td>
 </tr>
 <tr>
   <td class="info">Worst-pixel contrast on +55% scrim (legacy)</td>
   <td class="num info">3.36:1</td>
   <td class="num info">3.11:1</td>
-  <td class="num info">4.28:1</td>
+  <td class="num info">4.39:1</td>
+  <td class="num info">3.88:1</td>
 </tr>
 <tr>
   <td>Production composite size (raw WebP q90)</td>
   <td class="num">91 KB</td>
   <td class="num">159 KB</td>
   <td class="num">140 KB</td>
+  <td class="num">166 KB</td>
 </tr>
 <tr>
   <td class="info">+55% scrim composite size (legacy preview)</td>
   <td class="num info">79 KB</td>
   <td class="num info">87 KB</td>
   <td class="num info">72 KB</td>
-</tr>
-<tr>
-  <td class="info">Text-zone opaque px (legacy diagnostic)</td>
-  <td class="num info">112,500</td>
-  <td class="num info">112,500</td>
-  <td class="num info">112,500</td>
+  <td class="num info">89 KB</td>
 </tr>
 </table>
 
 <p class="caveat">
-  <strong>Scrim architecture:</strong> F6 left-gradient (CSS layer at runtime in Next.js build, not baked). Gate 8 metrics above are informational continuity data only &mdash; Puna&apos;s earlier body-AA fail and any Yungas deviation are architecturally resolved by the F6 gradient. All 3 biomes production-accepted on painterly cohesion evaluation.
+  <strong>Scrim architecture:</strong> F6 left-gradient (CSS layer at runtime in Next.js build, not baked). Gate 8 metrics above are informational continuity data only. All 4 biomes production-accepted on painterly cohesion evaluation. Selva is the first biome with TOP framing (Pad C second variation, vertical-mirror of Yungas RIGHT); framing-canopy compliance drifted to 30% (spec 20-25%) and pragmatic-accepted per the creative-direction-over-compliance precedent.
 </p>
 
 <h2>F6 gradient spec</h2>
 <p class="note">
   <code>background: linear-gradient(90deg, rgba(26,22,18,0.68) 0%, rgba(26,22,18,0.45) 30%, rgba(26,22,18,0.08) 55%, rgba(26,22,18,0.0) 72%);</code>
-  <br>Left ~55% viewport = natural text-contrast. Right ~45% viewport = painting fully visible. Text-content cross-biome lives in the left 50% viewport. Selva (TOP framing, upcoming biome 4) may require a rotated/adapted gradient variant to be decided at Selva prompt-authoring time.
+  <br>Left ~55% viewport = natural text-contrast. Right ~45% viewport = painting fully visible. Text-content cross-biome lives in the left 50% viewport.
 </p>
 
 <h2>Reference</h2>
 <p class="note">
-  All three biomes at 1024&times;768 native (fal.ai UI flux-2-pro). Pad C framing positions: Apu+Puna LEFT (cliff/outcrop), Yungas RIGHT (tree trunk &mdash; mirror validated). Yungas sky-subject L1 carries cross-biome overlap zones: top 15% Puna-handoff (mountain-flank silhouettes into mist), lower-middle 15% Selva-hint (warmer tropical green). Production composite = raw painterly WebP q90; F6 gradient applied at runtime by the Next.js frontend layer in Phase 2+.
+  All four biomes at 1024&times;768 native (fal.ai UI flux-2-pro). Pad C framing positions: Apu+Puna LEFT (cliff/outcrop), Yungas RIGHT (tree trunk, 1st mirror variation), Selva TOP (canopy, 2nd variation &mdash; first TOP framing in project). Selva sky-subject is the B-variant with a murky warm-brown jungle river flowing through the middle-ground (differentiates from Pacific Ocean teal). No wildlife cross-project. Production composite = raw painterly WebP q90; F6 gradient applied at runtime by the Next.js frontend layer in Phase 2+.
 </p>
 
 <script>
@@ -172,6 +179,7 @@
     { scroll: document.getElementById('scroll-a'), img: document.getElementById('img-a') },
     { scroll: document.getElementById('scroll-b'), img: document.getElementById('img-b') },
     { scroll: document.getElementById('scroll-c'), img: document.getElementById('img-c') },
+    { scroll: document.getElementById('scroll-d'), img: document.getElementById('img-d') },
   ];
   const allPanes = document.querySelectorAll('.pane');
   let syncing = false;
