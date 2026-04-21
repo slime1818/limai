@@ -38,3 +38,29 @@ Top-6 quantized clusters (24-step bins):
 **Palette C signature:** DARK humid dominant — shadows ~40% of pixel mass, greens are desaturated-warm (g and r close, low b), warm bronze threads through highlights NOT cool rim-light. Not "bright saturated jungle green" — dark mossy humid-warm.
 
 Plateau v7 palette-match target = these values. Plateau must extend this palette into the foreground band without visible break.
+
+## Canopy v5 palette reference (from locked sky-subject v7 Image 3 upper zone)
+Sky-subject v7 Image 3 + plateau v7 Image 8 integrate clean (palette-match resolved v1 break). Canopy Image 4 is the weak link — reads cartoony vs painterly lower layers. Regenerating canopy only.
+
+Pixel analysis of sky-subject upper 30% atmospheric zone (y=0..230, combined 235,520 non-magenta pixels):
+
+| Role | RGB | Hex |
+|------|-----|-----|
+| Atmospheric mid (median) | (87, 90, 52) | `#575a34` |
+| Dominant leaf-green | (71, 77, 45) | `#474d2d` |
+| Dark shadow silhouette | (20, 21, 12) | `#14150c` |
+| Trunk-silhouette (Q5 lum) | (12, 14, 9) | `#0c0e09` |
+| Leaf-rim highlight (Q75 lum) | (151, 152, 105) | `#979869` |
+| Warm bark undertone | (120, 117, 70) | `#787546` |
+
+Sub-zone breakdown:
+
+**Yungas-handoff mist (top 15%, y=0..115):** median #434527, dominant green #272d1a, warm undertone #726d3e, highlight #afae75 — mist rendered WARM not cool (warm Andean transition from Yungas cold khaki into Selva humid warm).
+
+**Canopy-emerging (y=115..230):** median #66693f, dominant green #555c36, warm undertone #7d7c4f, highlight #949569 — lighter than mist above, less saturated than plateau below, mid-atmospheric.
+
+**Feather blend zone (y=170..280, where canopy alpha fades into sky-subject):** median #525634, dominant green #4c5230, 47% green-dominant pixel density — anchors canopy LOWER EDGE palette target.
+
+Compared to plateau (locked, foreground darker): plateau dominant green #273116 vs canopy target #474d2d — canopy sits 2 Euclidean steps lighter in Z-order, producing natural atmospheric perspective.
+
+Canopy v5 palette-match target = these values. Canopy must extend sky-subject's upper atmospheric palette upward into the TOP 20-30% framing zone without visible style break, with painterly-humid shading matching the locked lower layers (NOT cartoony flat).
