@@ -1,19 +1,21 @@
 """Chroma-key extraction + composite for Selva v4 layers (1024 UI pipeline).
 
+Concept A v2 palette-match build: sky-subject v7 Image 3 (layered descent
+with murky jungle river) + plateau v7 Image 8 (foreground understory band
+painted against an RGB/hex palette extracted from the sky-subject lower-
+middle zone) share Palette C so no post-hoc compositor bridge is needed
+between them. Canopy Image 4 reused unchanged from the earlier v1 batch.
+
 TOP framing geometry (Pad C second variation, vertical-mirror analogue of
 Yungas RIGHT-mirror). Canopy source renders opaque at image top with
 magenta bottom; composite at offset (0, 0) places canopy on canvas top.
-Empirically adjust to (0, -50) or (0, -100) if first run shows canopy
-drifting below the frame-top.
+Canopy pipeline keeps the known-good luminance clamp (0.65) + bottom-edge
+feather (y=150..260) from v1 that resolved top-strip rim-light hot-spots
+and softened the canopy-to-sky-subject atmospheric seam.
 
-Chroma tolerance bumped to 130 following Yungas precedent — painterly
-pastel-pink chroma rendered by flux-2-pro at 1024 UI needs looser bounds
-to catch fern/leaf silhouette transition pixels without removing legit
-painted content.
-
-Selva sky-subject is the B-fixed variant with a jungle river through the
-middle-ground. Chroma-strip compliance at 12.5% required front-loaded
-instruction in the prompt; single accepted variant committed to repo.
+Chroma tolerance 130 (Yungas precedent) — painterly pastel-pink chroma
+rendered by flux-2-pro at 1024 UI needs looser bounds to catch fern/leaf
+silhouette transition pixels without removing legit painted content.
 
 Owns the 4-pane cross-biome viewer HTML (supersedes the 3-pane from
 process_yungas.py). Loads Apu + Puna + Yungas baselines for comparison.
@@ -40,9 +42,31 @@ OUT_DIR = REPO / "public" / "Backdrops" / "selva" / "processed"
 CANVAS = (1024, 768)
 CHROMA_TOLERANCE = 130  # Yungas precedent for painterly pastel-pink chroma
 # TOP framing geometry: canopy source is already top-dominant at image top.
-# (0, 0) keeps image at original position, canopy lands on canvas-y=0..
-# Adjust to (0, -50) or (0, -100) if canopy drifts too far below top edge.
+# (0, 0) keeps image at original position, canopy lands on canvas-y=0..230.
 FRAMING_OFFSET = (0, 0)
+# Canopy luminance clamp — Flux over-renders bright rim-light / sunbeam
+# highlights on canopy top-edge (v1 user flagged glitching at composite
+# TOP 30px, 2,630 pixels lum>0.70). 0.65 cap preserves legitimate filtered-
+# sunbeam highlights while killing hot-spots.
+CANOPY_LUM_CLAMP = 0.65
+# Canopy bottom-edge atmospheric feather — applied pre-offset on layer
+# image-y coords. Softens canopy-to-sky-subject transition so the underlying
+# content reads as atmospheric depth rather than a hard stitch seam.
+# 170/280 (shifted +20 from 150/260) after user flagged semi-transparent
+# patches in canopy body at y=100..150 in the prior composite — extra
+# opacity headroom in the canopy mass before fade begins.
+CANOPY_FEATHER_START_Y = 170  # begin fade (layer image-y, pre-offset)
+CANOPY_FEATHER_END_Y   = 280  # fully transparent past this y
+# Plateau canvas offset — +40 down to give river scene more vertical
+# breathing room above the plateau and compress plateau vertical presence
+# slightly. v1 placed plateau at (0, 0); +40 on user feedback 2026-04-21.
+PLATEAU_OFFSET = (0, 40)
+# Plateau luminance clamp — catches subtle specular highlights on leaves
+# in the 0.60-0.70 lum range that show as visible white specks after
+# compositing. 0.55 was too tight (crushed legitimate warm highlights);
+# 0.60 catches speculars without touching the painterly warm-tone mass.
+# Applied unconditionally (no diagnostic-gated skip).
+PLATEAU_LUM_CLAMP = 0.60
 
 # Text zone kept same as Yungas (legacy reference only; F6 gradient handles
 # contrast architecturally, Gate 8 is informational).
@@ -53,15 +77,14 @@ SCRIM_OPACITY = 0.55
 SCRIM_COLOR = (26, 22, 18)
 
 SOURCES = {
-    # Sky-subject: bottom 10% magenta strip (B-fixed front-loaded compliance)
+    # Sky-subject: bottom 8-12% magenta strip (v7 Concept A front-loaded).
     "sky-subject":    (RAW_DIR / "selva-sky-subject.jpg",
                        (0.45, 0.93, 0.55, 0.99)),
-    # Plateau: opaque BOTTOM 12-15%, magenta TOP 85-88% (standard plateau
-    # structure — same as Apu/Puna/Yungas). Sample top-center for chroma.
+    # Plateau: opaque BOTTOM ~30%, magenta TOP ~70%. Sample top-center.
     "plateau":        (RAW_DIR / "selva-plateau.jpg",
                        (0.45, 0.05, 0.55, 0.15)),
     # Framing-canopy: TOP 20-30% opaque canopy, BOTTOM 70-80% magenta.
-    # NEW structure (first TOP framing in project). Sample bottom-center.
+    # First TOP framing in project. Sample bottom-center for chroma.
     "framing-canopy": (RAW_DIR / "selva-framing-canopy.jpg",
                        (0.40, 0.80, 0.60, 0.95)),
 }
@@ -98,6 +121,105 @@ def remove_chroma(img_path: Path, target, tolerance):
     mask_img = mask_img.filter(ImageFilter.GaussianBlur(2))
     data[..., 3] = np.array(mask_img)
     return Image.fromarray(data.astype(np.uint8), mode="RGBA")
+
+
+def clamp_luminance(img: Image.Image, max_lum: float,
+                    diagnostic_zone=None) -> Image.Image:
+    """Clamp pixel BT.709 luminance to max_lum (normalized 0..1), preserve hue.
+
+    Pixels exceeding the threshold have RGB channels uniformly scaled down
+    so resulting pixel luminance equals max_lum * 255. Alpha preserved.
+    diagnostic_zone = (y1, y2, x1, x2) prints pre/post bright-pixel count.
+    """
+    arr = np.array(img).astype(np.float64)
+    rgb = arr[..., :3]
+    lum = 0.2126 * rgb[..., 0] + 0.7152 * rgb[..., 1] + 0.0722 * rgb[..., 2]
+    lum_norm = lum / 255.0
+
+    pre_count = None
+    if diagnostic_zone is not None:
+        y1, y2, x1, x2 = diagnostic_zone
+        pre_count = int((lum_norm[y1:y2, x1:x2] > max_lum).sum())
+        print(f"    pre-clamp zone y=[{y1}..{y2}), x=[{x1}..{x2}): "
+              f"{pre_count} pixels lum>{max_lum:.2f}")
+
+    scale = np.where(lum_norm > max_lum,
+                     (max_lum * 255.0) / np.maximum(lum, 1.0), 1.0)
+    arr[..., :3] = np.clip(rgb * scale[..., np.newaxis], 0, 255)
+
+    if diagnostic_zone is not None:
+        new_rgb = arr[..., :3]
+        new_lum = (0.2126 * new_rgb[..., 0] + 0.7152 * new_rgb[..., 1]
+                   + 0.0722 * new_rgb[..., 2]) / 255.0
+        post_count = int((new_lum[y1:y2, x1:x2] > max_lum).sum())
+        print(f"    post-clamp zone: {post_count} pixels lum>{max_lum:.2f} "
+              f"(reduced by {pre_count - post_count}, cap = {max_lum:.2f})")
+
+    return Image.fromarray(arr.astype(np.uint8), mode="RGBA")
+
+
+def feather_edge(img: Image.Image, edge: str, fade_start: int,
+                 fade_end: int, diagnostic: bool = True) -> Image.Image:
+    """Vertical alpha gradient feather, preserving silhouette transparency.
+
+    edge='bottom': opaque above fade_start, linear fade 1->0 through
+        fade_end; past fade_end fully transparent. Requires
+        fade_end > fade_start.
+    edge='top':    opaque below fade_start, linear fade 1->0 reversed
+        through fade_end; above fade_end fully transparent. Requires
+        fade_start > fade_end.
+    """
+    arr = np.array(img).astype(np.float64)
+    h = arr.shape[0]
+    ys = np.arange(h)
+    gradient = np.ones(h, dtype=np.float64)
+
+    if edge == 'bottom':
+        assert fade_end > fade_start, \
+            f"bottom edge needs fade_end > fade_start (got {fade_start}, {fade_end})"
+        fade_mask = (ys >= fade_start) & (ys < fade_end)
+        gradient[fade_mask] = 1.0 - (ys[fade_mask] - fade_start) / (fade_end - fade_start)
+        gradient[ys >= fade_end] = 0.0
+        bands = [
+            (0, fade_start, "above fade (full-opacity target)"),
+            (fade_start, fade_end, "fade zone"),
+            (fade_end, h, "below fade (transparent target)"),
+        ]
+    elif edge == 'top':
+        assert fade_start > fade_end, \
+            f"top edge needs fade_start > fade_end (got {fade_start}, {fade_end})"
+        fade_mask = (ys >= fade_end) & (ys < fade_start)
+        gradient[fade_mask] = (ys[fade_mask] - fade_end) / (fade_start - fade_end)
+        gradient[ys < fade_end] = 0.0
+        bands = [
+            (0, fade_end, "above fade (transparent target)"),
+            (fade_end, fade_start, "fade zone"),
+            (fade_start, h, "below fade (full-opacity target)"),
+        ]
+    else:
+        raise ValueError(f"edge must be 'bottom' or 'top', got {edge!r}")
+
+    if diagnostic:
+        pre_alpha = arr[..., 3].copy()
+        print(f"    pre-feather ({edge}, fade {fade_start}->{fade_end}) alpha opaque% per band:")
+        for y1, y2, label in bands:
+            zone = pre_alpha[y1:y2]
+            pct = (zone > 240).sum() * 100.0 / max(zone.size, 1)
+            print(f"      y=[{y1}..{y2}) {label}: {pct:.1f}%")
+
+    arr[..., 3] = np.clip(arr[..., 3] * gradient[:, np.newaxis], 0, 255)
+
+    if diagnostic:
+        post_alpha = arr[..., 3]
+        affected = int(((pre_alpha - post_alpha) > 1).sum())
+        print(f"    post-feather: {affected:,} pixels had alpha reduced")
+        print("    post-feather alpha opaque% per band:")
+        for y1, y2, label in bands:
+            zone = post_alpha[y1:y2]
+            pct = (zone > 240).sum() * 100.0 / max(zone.size, 1)
+            print(f"      y=[{y1}..{y2}) {label}: {pct:.1f}%")
+
+    return Image.fromarray(arr.astype(np.uint8), mode="RGBA")
 
 
 def process_layer(img_path: Path, sample_region, name: str) -> Image.Image:
@@ -494,6 +616,25 @@ def main() -> None:
     processed = {}
     for name, (path, sample) in SOURCES.items():
         layer = process_layer(path, sample, name)
+        if name == "plateau":
+            # Unconditional specular clamp at 0.60 — catches subtle white
+            # highlights on leaves (lum 0.60-0.70 range) visible after
+            # compositing, below earlier 0.70 diagnostic-gated threshold.
+            layer = clamp_luminance(layer, PLATEAU_LUM_CLAMP,
+                                    diagnostic_zone=(624, 686, 387, 660))
+        elif name == "framing-canopy":
+            # Top-strip rim-light hot-spot cap (Image 4 v1 had 2,630 pixels
+            # lum>0.70 at y=0..30; canopy v5 palette-match should have
+            # fewer, but clamp retained as insurance).
+            layer = clamp_luminance(layer, CANOPY_LUM_CLAMP,
+                                    diagnostic_zone=(0, 30, 0, 1024))
+            # Bottom-edge alpha feather — softens canopy-to-sky-subject seam.
+            layer = feather_edge(layer, 'bottom',
+                                 CANOPY_FEATHER_START_Y,
+                                 CANOPY_FEATHER_END_Y)
+        # Note: sky-subject intentionally raw. Concept A v2 palette-match
+        # prompt chain paints all three layers to share Palette C anchors,
+        # so no sky-subject feather-bridge is needed between them.
         out_path = OUT_DIR / f"selva-{name}.webp"
         layer.save(out_path, "WebP", quality=82, method=6)
         kb = out_path.stat().st_size / 1024
@@ -502,7 +643,7 @@ def main() -> None:
 
     print(f"\nSTEP 2 - composite TOP-framing (canopy @ offset {FRAMING_OFFSET})")
     sky = place(processed["sky-subject"], (0, 0))
-    plateau = place(processed["plateau"], (0, 0))
+    plateau = place(processed["plateau"], PLATEAU_OFFSET)
     canopy = place(processed["framing-canopy"], FRAMING_OFFSET)
     composite = composite_stack([sky, plateau, canopy])
     composite_path = OUT_DIR / "selva-composite.webp"
