@@ -1,0 +1,12 @@
+technical composition: flat solid bright magenta color strip along the TOP 50 to 55 percent of the frame AND bottom 15 percent of frame, painted opaque content lives in middle 30-35 percent band (roughly y=380 to y=660 of 768-tall frame), painterly digital illustration with soft gradient brushwork,
+
+painted band shows open Peruvian Pacific ocean surface in mid-distance during golden-hour:
+- upper edge of band: horizon line with 2 to 4 small Peruvian fishing boat silhouettes scattered asymmetrically across horizon at varied distances, boats as dark silhouettes against warm sunset glow behind, NO DETAIL just distant shape suggestion
+- middle of band: calm open Pacific ocean surface with gentle low swells catching sunset reflections, warm golden-amber highlight streaks running toward camera from horizon light, mirror-like reflective teal-blue water
+- lower edge of band: continuation of calm water with slightly warmer reflection glow, asymmetric ripple patterns, SAME water character as above — for palette-continuity with foreground waves layer
+
+CRITICAL: content band must occupy approximately y=380 to y=660. Everything above y=380 is magenta (sky will composite there). Everything below y=660 is magenta (waves will composite there). Include a 5-10 pixel soft edge transition into magenta at top and bottom so feather blending is possible.
+
+Palette: Ocean Teal #5a8a94 dominant with warm amber reflection streaks #c49a5a, boat silhouettes near black #1a1612, horizon haze lighter teal-gray #8ba4a8.
+
+no humans, no wildlife except boat silhouettes, no close-up boats (distant horizon silhouettes only), no dramatic crashing waves, no whitecaps, no foam, no seabirds, no framing elements like cliffs or rocks, no beach, no docks or piers, no lighthouse, no symmetric layouts, varied asymmetric boat placement

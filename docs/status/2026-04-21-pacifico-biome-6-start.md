@@ -28,3 +28,17 @@ Biome-5 production-locked 2026-04-21. 5 of 6 biomes done. Paracas validated BOTT
 ## Open questions
 - Boat silhouette compliance: Flux historically over-details boats. Watch for cartoony rendering in batch. Fallback: best-of-8 even if boats are suboptimal — we can mask-remove close-up boats if needed in process_pacifico.py, but not mask-add missing ones.
 - Sunset warmth vs teal-dominance balance: we want TEAL DOMINANT with warm ACCENTS, not warm-dominant. If batch comes out too warm (Paracas-like), iterate once.
+
+## Architecture correction 2026-04-21
+Initial v1 sky-subject had boats in middle zone. User caught that boats in static sky-subject would break parallax motion illusion in Next.js phase 4. Corrected to 3-layer:
+- sky-subject v2 = sky only (top 50% of canvas), boats removed
+- plateau v1 = open water with boat silhouettes (middle 30%, y=380-660)
+- framing-waves v1 = close foreground waves (bottom 25-30%, BOTTOM framing position)
+
+Pacifico gets BOTTOM framing (second BOTTOM after Paracas). Paracas BOTTOM = curved sand dune (solid/static). Pacifico BOTTOM = horizontal wave pattern (water/flowing). Material distinction preserves visual differentiation despite same framing position.
+
+Updated budget:
+- Sky-subject v2: $0.24 (8x batch, complex sunset)
+- Plateau v1 boats: $0.24 (8x batch because boats historically hard for Flux — up from $0.12 initial plan)
+- Framing-waves v1: $0.24 (8x batch, novel wave rendering)
+- Total: $0.72 of ~$1.75 remaining. Still well within budget.
