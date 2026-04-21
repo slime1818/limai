@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>Cross-biome style cohesion &mdash; Apu vs Puna vs Yungas vs Selva (F6 scrim)</title>
+<title>Cross-biome style cohesion &mdash; Apu vs Puna vs Yungas vs Selva vs Paracas (F6 scrim)</title>
 <style>
   :root {
     --f6-gradient: linear-gradient(90deg,
@@ -26,9 +26,10 @@
   button.active { background: #c8a26b; color: #1a1612; }
   button.new { border-color: #c8a26b; }
   button.legacy { opacity: 0.7; }
-  .quartet { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 6px; }
-  @media (max-width: 1400px) { .quartet { grid-template-columns: 1fr 1fr; } }
-  @media (max-width: 720px)  { .quartet { grid-template-columns: 1fr; } }
+  .quintet { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
+  @media (max-width: 1700px) { .quintet { grid-template-columns: repeat(3, 1fr); } }
+  @media (max-width: 1100px) { .quintet { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 600px)  { .quintet { grid-template-columns: 1fr; } }
   .pane { position: relative; min-width: 0; }
   .pane-label { position: absolute; top: 6px; left: 6px;
                 background: rgba(26,22,18,0.9); padding: 3px 8px;
@@ -57,7 +58,7 @@
 </style>
 </head>
 <body>
-<h1>Cross-biome style cohesion &mdash; Apu (1) &middot; Puna (2) &middot; Yungas (3) &middot; Selva (4) &middot; F6 scrim</h1>
+<h1>Cross-biome style cohesion &mdash; Apu (1) &middot; Puna (2) &middot; Yungas (3) &middot; Selva (4) &middot; Paracas (5) &middot; F6 scrim</h1>
 <div class="toolbar">
   <span>View:</span>
   <button data-view="f6" class="active new">F6 gradient (production)</button>
@@ -71,7 +72,7 @@
   <span style="opacity:0.6">Scroll one pane to sync the others</span>
 </div>
 
-<div class="quartet">
+<div class="quintet">
   <div class="pane show-f6">
     <span class="pane-label">Apu &middot; 1 &middot; LEFT cliff</span>
     <div class="scroll-wrap" id="scroll-a">
@@ -124,17 +125,31 @@
     </div>
     <div class="gradient-overlay"></div>
   </div>
+  <div class="pane show-f6">
+    <span class="pane-label">Paracas &middot; 5 &middot; BOTTOM dune</span>
+    <div class="scroll-wrap" id="scroll-e">
+      <img id="img-e"
+           data-raw="paracas/processed/paracas-composite.webp"
+           data-scrim55="paracas/processed/paracas-composite-scrim55.webp"
+           data-heatmap="paracas/processed/paracas-composite-heatmap.png"
+           data-f6="paracas/processed/paracas-composite.webp"
+           src="paracas/processed/paracas-composite.webp"
+           alt="Paracas composite">
+    </div>
+    <div class="gradient-overlay"></div>
+  </div>
 </div>
 
 <h2>Metrics &mdash; informational only, F6 gradient is the production scrim</h2>
 <table>
-<tr><th>Metric</th><th>Apu (1)</th><th>Puna (2)</th><th>Yungas (3)</th><th>Selva (4)</th></tr>
+<tr><th>Metric</th><th>Apu (1)</th><th>Puna (2)</th><th>Yungas (3)</th><th>Selva (4)</th><th>Paracas (5)</th></tr>
 <tr>
   <td class="info">p95 contrast on +55% scrim composite (legacy)</td>
   <td class="num info">5.35:1</td>
   <td class="num info">3.58:1</td>
   <td class="num info">5.89:1</td>
   <td class="num info">6.93:1</td>
+  <td class="num info">4.77:1</td>
 </tr>
 <tr>
   <td class="info">Worst-pixel contrast on +55% scrim (legacy)</td>
@@ -142,6 +157,7 @@
   <td class="num info">3.11:1</td>
   <td class="num info">4.39:1</td>
   <td class="num info">4.24:1</td>
+  <td class="num info">3.54:1</td>
 </tr>
 <tr>
   <td>Production composite size (raw WebP q90)</td>
@@ -149,6 +165,7 @@
   <td class="num">159 KB</td>
   <td class="num">140 KB</td>
   <td class="num">202 KB</td>
+  <td class="num">105 KB</td>
 </tr>
 <tr>
   <td class="info">+55% scrim composite size (legacy preview)</td>
@@ -156,11 +173,12 @@
   <td class="num info">87 KB</td>
   <td class="num info">72 KB</td>
   <td class="num info">110 KB</td>
+  <td class="num info">46 KB</td>
 </tr>
 </table>
 
 <p class="caveat">
-  <strong>Scrim architecture:</strong> F6 left-gradient (CSS layer at runtime in Next.js build, not baked). Gate 8 metrics above are informational continuity data only. All 4 biomes production-accepted on painterly cohesion evaluation. Selva is the first biome with TOP framing (Pad C second variation, vertical-mirror of Yungas RIGHT); framing-canopy compliance drifted to 30% (spec 20-25%) and pragmatic-accepted per the creative-direction-over-compliance precedent.
+  <strong>Scrim architecture:</strong> F6 left-gradient (CSS layer at runtime in Next.js build, not baked). Gate 8 metrics above are informational continuity data only. All 5 biomes production-accepted on painterly cohesion evaluation. Paracas is the first biome with BOTTOM framing (curved-arc foreground sand dune, novel in project), warm-bronze coastal desert palette with cool lavender shadow threading. Framing positions cross-project: Apu+Puna LEFT (cliff/outcrop), Yungas RIGHT (tree trunk), Selva TOP (canopy), Paracas BOTTOM (dune) &mdash; 4 distinct framing architectures, 1 remaining for Pacifico.
 </p>
 
 <h2>F6 gradient spec</h2>
@@ -171,7 +189,7 @@
 
 <h2>Reference</h2>
 <p class="note">
-  All four biomes at 1024&times;768 native (fal.ai UI flux-2-pro). Pad C framing positions: Apu+Puna LEFT (cliff/outcrop), Yungas RIGHT (tree trunk, 1st mirror variation), Selva TOP (canopy, 2nd variation &mdash; first TOP framing in project). Selva sky-subject is the B-variant with a murky warm-brown jungle river flowing through the middle-ground (differentiates from Pacific Ocean teal). No wildlife cross-project. Production composite = raw painterly WebP q90; F6 gradient applied at runtime by the Next.js frontend layer in Phase 2+.
+  All five biomes at 1024&times;768 native (fal.ai UI flux-2-pro). Framing positions: Apu+Puna LEFT (cliff/outcrop), Yungas RIGHT (tree trunk, 1st mirror variation), Selva TOP (canopy, 2nd variation &mdash; first TOP framing), Paracas BOTTOM (curved-arc dune &mdash; first BOTTOM framing). Selva sky-subject has a murky warm-brown jungle river through the middle-ground (differentiates from Paracas coastal desert and future Pacifico ocean teal). No wildlife cross-project. Production composite = raw painterly WebP q90; F6 gradient applied at runtime by the Next.js frontend layer in Phase 2+.
 </p>
 
 <script>
@@ -180,6 +198,7 @@
     { scroll: document.getElementById('scroll-b'), img: document.getElementById('img-b') },
     { scroll: document.getElementById('scroll-c'), img: document.getElementById('img-c') },
     { scroll: document.getElementById('scroll-d'), img: document.getElementById('img-d') },
+    { scroll: document.getElementById('scroll-e'), img: document.getElementById('img-e') },
   ];
   const allPanes = document.querySelectorAll('.pane');
   let syncing = false;
