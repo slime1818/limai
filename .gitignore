@@ -42,3 +42,16 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Python pipeline intermediates (regenerable via scripts/process_*.py)
+public/Backdrops/*/processed/
+*.webp.bak
+
+# OS cruft (additional to .DS_Store above)
+Thumbs.db
+desktop.ini
+
+# Editor
+.vscode/
+.idea/
+*.swp
