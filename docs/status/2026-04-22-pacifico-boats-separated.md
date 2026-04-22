@@ -27,3 +27,10 @@ Same palette anchors + same 4-zone structure, but upper-middle zone describes th
 
 ## Applied to boats v1
 New prompt: silhouettes on full magenta background, no water, no sky, no context. Boats sized and positioned to drop cleanly onto plateau v2's implied horizon line in compositor.
+
+## Plateau v2 locked (Image 3) — seam notes
+
+- Plateau top y=0-60 drifts warm (#cdbda4) vs sky-subject exit (#6d7577). 70-pt Euclidean delta.
+- Resolution: gradient alpha-fade on plateau top 0..40px in process_pacifico.py composite stage. Not a re-run.
+- Magenta strip: 16.4% of canvas (y=642..768). Wider than prompt-asked 8-12% but within extraction tolerance.
+- Glint palette plateau Image 3: #fbf0d1 brightest, cooler than sky-subject #ecc8a1 by 33 R-B points. Boats keep warm-brown silhouette palette (Option A) representing sunset backlight direction.
