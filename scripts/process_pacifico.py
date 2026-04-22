@@ -54,6 +54,22 @@ FRAMING_WAVES_OFFSET   = (0, 60)
 PLATEAU_ALPHA_START   = 0.4
 PLATEAU_ALPHA_END_Y   = 40
 
+# Boats layer post-processing (regression fix after production-lock-v1):
+# 1. Mask top y<100 (kills warm-pink 'sky prior' drift RGB ~(254,119,188)
+#    that survives chroma extraction because R-B gap ~66 > tolerance 80 is
+#    close but strict is_pinkish g<110 passes for pink G=119. Simpler to
+#    just zero alpha since no hull content lives in top 100 rows.)
+# 2. HSL hue-rotate + desaturate pink-leaning hull pixels. Source hulls
+#    were painted pink (median #b22b6b, R-B +71) due to the 'boats on
+#    magenta ocean' reframe — they carry magenta reflection throughout.
+#    Post-extraction median still pink (#62243f, R-B +35). Rotate toward
+#    warm-brown hue 25deg with 0.75 strength, reduce saturation by 65%.
+BOATS_TOP_MASK_Y          = 100
+PINK_HULL_R_B_THRESHOLD   = 15
+PINK_HULL_TARGET_HUE_DEG  = 25
+PINK_HULL_HUE_SHIFT       = 0.75
+PINK_HULL_SAT_REDUCTION   = 0.65
+
 # Text zone (legacy informational; F6 gradient is production scrim).
 TEXT_ZONE = (180, 280, 630, 530)
 TEXT_COLOR_LUM = 0.8423
@@ -126,6 +142,97 @@ def process_layer(img_path, sample_region, name):
         print(f"    [info] layer size {layer.size} != canvas {CANVAS}, resizing")
         layer = layer.resize(CANVAS, Image.LANCZOS)
     return layer
+
+
+def mask_top_rows(img, mask_end_y, diagnostic=True):
+    """Zero alpha on all pixels with y < mask_end_y. Used on boats layer
+    to kill the warm-pink 'sky prior' drift at y=0..99 that otherwise
+    remains opaque after chroma extraction (R>B magenta-adjacent but
+    outside strict is_pinkish bounds, so chroma pass leaves it intact)."""
+    arr = np.array(img).astype(np.float64)
+    h = arr.shape[0]
+    pre_opaque = int((arr[:mask_end_y, :, 3] > 200).sum()) if diagnostic else 0
+    arr[:mask_end_y, :, 3] = 0
+    if diagnostic:
+        print(f"    top-mask: zeroed alpha y=0..{mask_end_y} ({pre_opaque:,} previously-opaque pixels -> transparent)")
+    return Image.fromarray(arr.astype(np.uint8), mode="RGBA")
+
+
+def rgb_to_hsl_np(rgb):
+    """Vectorized RGB->HSL. rgb: float array in [0,1], shape (...,3). Returns (h, s, l) each same shape as first axes."""
+    r, g, b = rgb[..., 0], rgb[..., 1], rgb[..., 2]
+    cmax = np.maximum(np.maximum(r, g), b)
+    cmin = np.minimum(np.minimum(r, g), b)
+    delta = cmax - cmin
+    l = (cmax + cmin) / 2.0
+    denom = 1.0 - np.abs(2.0 * l - 1.0)
+    denom_safe = np.where(denom == 0, 1e-10, denom)
+    s = np.where(delta == 0, 0.0, delta / denom_safe)
+    h = np.zeros_like(r)
+    safe_delta = np.where(delta == 0, 1e-10, delta)
+    h = np.where((cmax == r) & (delta > 0), ((g - b) / safe_delta) % 6.0, h)
+    h = np.where((cmax == g) & (delta > 0), (b - r) / safe_delta + 2.0, h)
+    h = np.where((cmax == b) & (delta > 0), (r - g) / safe_delta + 4.0, h)
+    h = h / 6.0  # [0, 1]
+    h = np.where(h < 0, h + 1.0, h)
+    return h, s, l
+
+
+def hsl_to_rgb_np(h, s, l):
+    """Vectorized HSL->RGB. h/s/l in [0,1]. Returns Nx3 shape (...,3) in [0,1]."""
+    h6 = h * 6.0
+    c = (1.0 - np.abs(2.0 * l - 1.0)) * s
+    x = c * (1.0 - np.abs((h6 % 2.0) - 1.0))
+    m = l - c / 2.0
+    seg = np.floor(h6).astype(int) % 6
+    r = np.zeros_like(h)
+    g = np.zeros_like(h)
+    b = np.zeros_like(h)
+    r = np.where(seg == 0, c, r); g = np.where(seg == 0, x, g)
+    r = np.where(seg == 1, x, r); g = np.where(seg == 1, c, g)
+    g = np.where(seg == 2, c, g); b = np.where(seg == 2, x, b)
+    g = np.where(seg == 3, x, g); b = np.where(seg == 3, c, b)
+    r = np.where(seg == 4, x, r); b = np.where(seg == 4, c, b)
+    r = np.where(seg == 5, c, r); b = np.where(seg == 5, x, b)
+    return np.stack([r + m, g + m, b + m], axis=-1)
+
+
+def neutralize_pink_hulls(img, r_b_threshold=15, target_hue_deg=25,
+                          hue_shift_strength=0.75, sat_reduction=0.65,
+                          diagnostic=True):
+    """HSL hue-rotate + desaturate magenta-leaning opaque pixels.
+
+    Targets boat-layer hull pixels that retain pink-magenta reflection from
+    the rendered-ocean scene the boats were painted inside. Pixels with
+    R > B + threshold get rotated toward warm-brown hue and desaturated.
+    Preserves L (luminance) so hull darkness is retained.
+    """
+    arr = np.array(img).astype(np.float64)
+    rgb_01 = arr[..., :3] / 255.0
+    alpha = arr[..., 3]
+
+    h, s, l = rgb_to_hsl_np(rgb_01)
+
+    r_u8 = arr[..., 0].astype(np.int32)
+    b_u8 = arr[..., 2].astype(np.int32)
+    target_mask = (alpha > 10) & (r_u8 > b_u8 + r_b_threshold)
+
+    target_h_01 = target_hue_deg / 360.0
+    # Shortest angular path in [0,1]
+    dh = (target_h_01 - h + 1.5) % 1.0 - 0.5
+    h_new = np.where(target_mask, (h + dh * hue_shift_strength) % 1.0, h)
+    s_new = np.where(target_mask, s * (1.0 - sat_reduction), s)
+
+    new_rgb = hsl_to_rgb_np(h_new, s_new, l)
+    arr[..., :3] = np.clip(new_rgb * 255.0, 0, 255)
+
+    if diagnostic:
+        affected = int(target_mask.sum())
+        print(f"    pink-neutralize: {affected:,} pixels (R>B+{r_b_threshold}) "
+              f"hue->{target_hue_deg}deg (shift {hue_shift_strength}) "
+              f"sat*={1-sat_reduction:.2f}")
+
+    return Image.fromarray(arr.astype(np.uint8), mode="RGBA")
 
 
 def alpha_ramp_top(img, end_y, start_alpha=0.4, end_alpha=1.0, diagnostic=True):
@@ -260,6 +367,15 @@ def main():
         if name == "plateau":
             layer = alpha_ramp_top(layer, PLATEAU_ALPHA_END_Y,
                                    PLATEAU_ALPHA_START, 1.0)
+        elif name == "boats":
+            layer = mask_top_rows(layer, BOATS_TOP_MASK_Y)
+            layer = neutralize_pink_hulls(
+                layer,
+                r_b_threshold=PINK_HULL_R_B_THRESHOLD,
+                target_hue_deg=PINK_HULL_TARGET_HUE_DEG,
+                hue_shift_strength=PINK_HULL_HUE_SHIFT,
+                sat_reduction=PINK_HULL_SAT_REDUCTION,
+            )
         out_path = PROCESSED_DIR / f"pacifico-{name}.webp"
         layer.save(out_path, "WebP", quality=82, method=6)
         kb = out_path.stat().st_size / 1024
