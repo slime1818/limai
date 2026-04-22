@@ -1,0 +1,19 @@
+technical composition: flat solid bright magenta RGB(238,3,120) background filling 100 percent of the frame EXCEPT for small painted boat silhouettes isolated against the magenta for chroma-key extraction, this is a parallax isolation layer for a composite pipeline,
+
+the magenta background must be perfectly flat bright saturated RGB(238,3,120) across entire frame with zero variation zero gradient zero texture zero noise,
+
+painted onto this magenta background are 4 to 6 small Peruvian artisanal fishing boat silhouettes positioned along a single shared implied horizontal line sitting roughly one third of the way down from the top edge of the frame, all boat silhouettes share the same vertical horizon-band position with zero vertical spread — every boat sits on the same implied horizon line as if all are at the same ocean distance plane,
+
+boat silhouettes specifications:
+- all boats sit ON the same implied horizontal line at the one-third-from-top position, rendered as small silhouettes, zero vertical spread — they form a horizontal band of silhouettes only, never stacked never staggered vertically
+- varied perspective sizes suggesting depth across the horizon band: 1 boat notably larger suggesting closest position, 2 to 3 boats clearly smaller suggesting mid-distance, 1 to 2 boats tiny and distant nearly to the horizon vanishing point, all boats remain small in absolute terms (none dominates the frame, largest boat occupies less than one twelfth of frame width), size hierarchy reads as atmospheric perspective
+- varied asymmetric x-position spacing across frame width: clustered slightly left-of-center with sparser distribution toward right edge, NOT evenly distributed, NOT symmetric
+- painted as dark warm-brown to near-black silhouettes RGB approximately (40,30,25) to (70,55,45) for body, allowing slight tonal variation between boats
+- simple hull shape plus single mast outline per boat, basic peruvian coastal fishing boat aesthetic, no rigging detail no cabin windows no deck gear no crew no nets
+- crisp clearly-defined silhouette edges against the magenta background, no soft-edged feathering no magenta bleed into boat silhouettes no atmospheric haze crossing silhouette boundary, painterly brushwork lives INSIDE the boat shape in tonal variation only, the silhouette outline itself must be hard-edged for clean chroma-key extraction
+- no shadows cast on magenta background (shadows would corrupt chroma extraction)
+- no water drawn, no reflections drawn, no ripples drawn, no wake, no splash, no water context AT ALL
+
+composition: this is an isolated silhouette layer for chroma-key compositing, pure magenta background with only the boat shapes painted onto it, boats hang at the horizon-height band only with full magenta above and below them,
+
+no sky, no clouds, no sun, no horizon line drawn (only implied through boat placement), no water, no waves, no reflections, no beach, no land, no other vessels, no birds, no humans, no text, no logos, no shadows on magenta, no atmospheric haze filling the magenta zone, no color variation in the magenta background, no gradient in the magenta, no painterly texture on the magenta background only on the boats themselves
