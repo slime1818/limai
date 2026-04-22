@@ -1,0 +1,19 @@
+painterly digital illustration of small Peruvian artisanal fishing boats at sea during late afternoon, rendered with soft gradient brushwork matching the LimAI biome series, painterly shading not photorealistic,
+
+the ocean water is painted as flat bright saturated magenta color RGB(238,3,120) across the entire frame — this is a stylized composition where the water reads as pure magenta tone rather than natural blue, magenta water filling the full frame from foreground to the implied distant horizon,
+
+the sky above the horizon is NOT drawn in this painting — the composition is entirely magenta water and boats, the horizon is implied only through perspective and boat placement, the upper portion of the frame is still magenta water continuing up (this is an aerial or elevated viewpoint where we see only ocean surface stretching far to the implied distance),
+
+4 to 6 small Peruvian artisanal fishing boat silhouettes positioned NATURALLY on this magenta ocean as they would appear on real water at a middle-distance, boats sit at varying distances creating atmospheric perspective: 1 larger boat closer to camera, 2 to 3 mid-distance boats, 1 to 2 smaller distant boats nearly at the implied horizon vanishing point,
+
+boats positioned with natural ocean realism — each hull sits naturally in the magenta water with hulls partially waterlined (the bottom of each hull meets the magenta water surface at its appropriate wave position), masts rising vertically from each hull, boats at slightly different y-positions due to natural perspective and wave motion, some boats tilted very slightly as if on gentle swells,
+
+all boats clustered in the upper-middle portion of the frame (roughly between one-quarter and one-half down from the top edge) — NOT at the very top, NOT in the foreground, but sitting in the middle-distance zone of the ocean as if viewed from a moderately elevated position looking across the water,
+
+asymmetric x-distribution: clustered slightly left-of-center with sparser spacing toward the right edge, natural fishing fleet scatter NOT evenly distributed NOT symmetric,
+
+boat silhouettes rendered as dark warm-brown to near-black painterly silhouettes RGB approximately (40,30,25) to (70,55,45), simple hull shapes with single mast outlines, basic Peruvian coastal fishing boat aesthetic, no rigging detail no cabin windows no deck gear no crew no nets,
+
+the magenta water should read as flat dominant color tone with only minimal subtle brush texture — no dramatic waves no breaking whitecaps no foam no strong reflections, just calm magenta water surface with perhaps the faintest painterly brush variation that stays within the magenta tone range,
+
+no sky drawn, no clouds, no sun, no horizon line painted as a distinct band, no cool-blue water colors, no teal water, no natural ocean colors — the water is stylized magenta only, no shoreline, no beach, no land, no birds, no humans, no whales, no fish, no other vessels, no text, no logos, no gradient from magenta to other colors — the magenta water tone dominates the entire frame except where boats interrupt it
