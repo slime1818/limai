@@ -23,6 +23,14 @@ export function BiomeSection({
         sizes="100vw"
         className="object-cover"
       />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 z-0"
+        style={{
+          background:
+            "linear-gradient(90deg, rgba(26,22,18,0.68) 0%, rgba(26,22,18,0.45) 30%, rgba(26,22,18,0.08) 55%, rgba(26,22,18,0.0) 72%)",
+        }}
+      />
       <div className="relative z-10 flex h-full items-center px-8 md:px-16 lg:px-24">
         <div className="max-w-2xl">
           <h1 className="font-display text-warm-white text-6xl md:text-8xl lg:text-9xl leading-none tracking-tight">
