@@ -14,7 +14,7 @@ export function BiomeSection({
   tagline,
 }: BiomeSectionProps) {
   return (
-    <section className="relative h-dvh w-full overflow-hidden">
+    <section className="relative h-dvh w-full md:max-w-[calc(100dvh*4/3)] md:mx-auto overflow-hidden bg-noche-andina">
       <Image
         src={image}
         alt={imageAlt}
