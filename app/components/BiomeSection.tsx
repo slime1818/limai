@@ -23,6 +23,7 @@ export function BiomeSection({
         sizes="100vw"
         className="object-cover"
       />
+      {/* F6 horizontal scrim. Selva needs variant, TOP-framing canopy clashes with left-fade. Must-do gate before T3 integration, see Fase 2 substep 13. */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 z-0 hidden md:block"
