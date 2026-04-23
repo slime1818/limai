@@ -5,8 +5,8 @@ export type Biome = {
   imageAlt: string;
   title: string;
   tagline: string;
-  ctaLabel: string;
-  ctaHref: string;
+  ctaLabel: string | null;
+  ctaHref: string | null;
   subpage: string;
 };
 
@@ -16,12 +16,12 @@ export const biomes: Biome[] = [
     accentColor: "var(--color-apu)",
     image: "/biomes/apu.webp",
     imageAlt:
-      "Apu schilderij: Andes bergwand met ijzige kroon bij dageraad, rotspartij links als framing",
+      "Andes-bergwand met ijzige top bij dageraad, rotspartij links op de voorgrond",
     title: "LimAI",
     tagline:
       "Sites voor merken met iets te zeggen. Een studio uit Amsterdam met wortels in de Andes.",
-    ctaLabel: "subtle scroll indicator",
-    ctaHref: "/coming-soon",
+    ctaLabel: null,
+    ctaHref: null,
     subpage: "-",
   },
   {
@@ -29,7 +29,7 @@ export const biomes: Biome[] = [
     accentColor: "var(--color-puna)",
     image: "/biomes/puna.webp",
     imageAlt:
-      "Puna schilderij: altiplano met besneeuwde Andes-toppen, ichu-graspollen op de vlakte, rotspartij links als framing",
+      "Andes-hoogland met besneeuwde toppen, droge grassen op de vlakte, rotsen links",
     title: "Wie we zijn",
     tagline:
       "Twee makers, één missie: digitale merken met karakter bouwen.",
@@ -42,7 +42,7 @@ export const biomes: Biome[] = [
     accentColor: "var(--color-yungas)",
     image: "/biomes/yungas.webp",
     imageAlt:
-      "Yungas schilderij: cloud forest vallei met lichtstralen door de mist, hangende lianen rechts als framing",
+      "Nevelwoud-vallei met zonnestralen door de mist, hangende lianen aan de rechterzijde",
     title: "Wat we doen",
     tagline:
       "Websites, brand identity en strategie. Transparante pakketten, geen verrassingen.",
@@ -55,7 +55,7 @@ export const biomes: Biome[] = [
     accentColor: "var(--color-selva)",
     image: "/biomes/selva.webp",
     imageAlt:
-      "Selva schilderij: diep regenwoud met canopy van takken en lianen als TOP-framing, dichte begroeiing rondom een rivier",
+      "Dicht regenwoud met hangende lianen en een bladerdak van takken bovenin",
     title: "Wat we maakten",
     tagline:
       "Een blik op recent werk voor merken die verschil willen maken.",
@@ -68,7 +68,7 @@ export const biomes: Biome[] = [
     accentColor: "var(--color-paracas)",
     image: "/biomes/paracas.webp",
     imageAlt:
-      "Paracas schilderij: woestijnlandschap met zandduinen en rotsbogen in de verte, warme bronstinten",
+      "Woestijnlandschap met zandduinen en rotsbogen in warme bronstinten",
     title: "Hoe we werken",
     tagline: "Helder proces, open communicatie, geen omwegen.",
     ctaLabel: "Ons proces →",
@@ -80,7 +80,7 @@ export const biomes: Biome[] = [
     accentColor: "var(--color-pacifico)",
     image: "/biomes/pacifico.webp",
     imageAlt:
-      "Pacifico schilderij: schemering-oceaan met verspreide vissersboten op warme goudbruine golven",
+      "Schemer-oceaan met verspreide vissersboten op goudbruine golven",
     title: "Laten we praten",
     tagline: "Klaar om je project te starten? Stuur ons een bericht.",
     ctaLabel: "Start een project →",
