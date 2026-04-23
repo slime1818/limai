@@ -159,6 +159,22 @@ background: linear-gradient(
 - **Claude Code** — co-pilot
 - **Abdul** — outreach and social. Not implementation.
 
+### Repo layout
+
+Flat on repo root (no `site/` subfolder). The Python asset pipeline in `scripts/` and the Next.js app share the same root, so `public/` serves both the composite source-of-truth under `public/Backdrops/` and the runtime composites under `public/biomes/`.
+
+```
+limai/
+├── app/                    ← Next.js App Router
+├── public/
+│   ├── Backdrops/          ← composite source-of-truth per biome
+│   ├── biomes/             ← runtime WebP copies for the site
+│   └── logo-*.{png,svg}    ← brand assets
+├── scripts/                ← Python composite pipeline
+├── docs/                   ← design + status + learnings
+└── prompts/                ← Flux prompts archive
+```
+
 ---
 
 ## 6. Implementation roadmap
