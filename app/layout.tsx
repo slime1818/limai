@@ -6,6 +6,7 @@ const fraunces = Fraunces({
   variable: "--font-fraunces",
   subsets: ["latin"],
   display: "swap",
+  axes: ["opsz"],
 });
 
 const inter = Inter({
