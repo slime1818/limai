@@ -39,7 +39,7 @@
 │  ~~~~~~~~~~~~~~~~~~~~~~~~                  │foto │  │
 │  ~~~~~~~~~~~                               │     │  │
 │                                            │     │  │
-│  19 · Amsterdam · creatief                 └─────┘  │
+│  19 · Amsterdam · designer                 └─────┘  │
 │                                                     │
 │  Lees ons verhaal →                                 │
 │                                                     │
@@ -80,7 +80,7 @@
 
   Zet ontwerpen om naar werkende sites en haalt de trekker over bij release. Werkt in Elementor en Framer. Ook eerste aanspreekpunt voor launch, hosting en dagelijks beheer.
 
-- **Meta-strip** (Inter monospace, copper, subtiel): 19 · Amsterdam · creatief
+- **Meta-strip** (Inter monospace, copper, subtiel): 19 · Amsterdam · designer
 - **CTA:** Lees ons verhaal →
 
 ---
@@ -150,6 +150,7 @@ foto-treatment: Olivier maakt zelf een versie met en zonder duotone, vergelijkin
 Abdul's derde feit: nu "creatief" als placeholder, vervangen na Abdul's review
 Olivier's derde feit: nu "bouwt sinds zijn tienerjaren" als gok, bevestigen of vervangen
 /over-ons pagina: aparte werksessie, valt buiten substep 1
+- /over-ons placeholder pagina wordt meegebouwd in substep 2 (lege page met alleen een minimale heading, inhoud komt later)
 
 
 Changelog

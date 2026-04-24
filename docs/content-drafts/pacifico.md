@@ -192,10 +192,10 @@
 
 - **SDK:** `resend` npm package
 - **API key:** environment variable `RESEND_API_KEY` in `.env.local` en in Vercel-environment
+- **Verified domain:** `limaidesign.com` is verified in Resend EU-west-1 region (DKIM, SPF en DMARC DNS-records actief). From-adres kan `noreply@limaidesign.com` of `contact@limaidesign.com` zijn, beide werken op het verified domain
 - **Ontvangend email-adres:** environment variable `CONTACT_EMAIL`
-  - **Huidige waarde:** `o.dearmenteras1@gmail.com`
-  - **Later vervangen:** door LimAI business-email zodra die bestaat (bijv. `hello@limai.nl`)
-  - Wisselen kan zonder code-wijziging, alleen `.env` aanpassen
+  - **Huidige waarde:** `olivier@limaidesign.com`
+  - Wisselen kan zonder code-wijziging, alleen `.env` aanpassen (bv. `abdul@limaidesign.com` of een gedeelde mailbox)
 
 ### API route
 
@@ -206,7 +206,7 @@
 - **Spam protection:** honeypot-veld in form (hidden field dat bots invullen, mensen niet), rejection als ingevuld
 - **Rate limiting (later):** IP-based rate limit, bv. 3 verzendingen per uur per IP. Voor launch niet kritisch, inbouwen bij eerste spam-golf
 - **Email-inhoud (wat LimAI ontvangt):**
-  - From: `contact@limai-form.vercel.app` of Resend's default, as-appropriate
+  - From: `noreply@limaidesign.com` of `contact@limaidesign.com` (beide werken op het verified domain)
   - To: `CONTACT_EMAIL` env-value
   - Subject: `Nieuw bericht van [Naam], type: [projectType]`
   - Body: plain tekst of simpele HTML met alle formuliergegevens
@@ -342,12 +342,13 @@
 
 ## Open items
 
-- **CONTACT_EMAIL swap:** nu `o.dearmenteras1@gmail.com`, later LimAI business-email. Vervanging via `.env` zonder code-wijziging
+- **CONTACT_EMAIL swap:** nu `olivier@limaidesign.com`, later LimAI business-email. Vervanging via `.env` zonder code-wijziging
 - **Resend setup:** account aanmaken, domain verifiëren als `limai.nl` live is (voor goede deliverability en geen spam-markering), API key genereren, toevoegen aan `.env.local` en Vercel-environment
 - **Spam protection:** honeypot is er, rate-limiting komt bij eerste spam-golf. Cloudflare Turnstile als alternatief als honeypot niet volstaat
 - **Success-state copy:** nu vrij zakelijk. Zou ook warmer kunnen zijn ("Bedankt voor je bericht! Je hoort snel van ons."). Subjectief, later fine-tunen
 - **email-subject format:** nu `Nieuw bericht van [Naam], type: [projectType]`. Als volume groot wordt: uitbreiden naar `[LimAI] [type] - [Naam]` of vergelijkbaar voor eenvoudiger sorteren in inbox
 - **mobile-pass:** volgt na alle 6 desktop-drafts klaar
+- Google Workspace werkt, olivier@limaidesign.com is de ontvanger. Abdul@limaidesign.com bestaat ook voor als we later de ontvanger willen uitbreiden
 
 ---
 

@@ -2,6 +2,7 @@
 
 **Datum:** 2026-04-24
 **Status:** alle 6 biome-drafts in repo, klaar voor Abdul touchpoint 1
+**Asset-status:** alle verplichte assets verzameld, alle beslissingen gemaakt, klaar voor substep 2 implementatie
 **Volgende stap:** Abdul reviewt batch, dan substep 2 (per-biome implementatie)
 
 ---
@@ -18,6 +19,14 @@ Alle 6 biome-drafts gecommit in `docs/content-drafts/`:
 - `pacifico.md` (biome 6, contact)
 
 Elke draft bevat: layout-wireframe (ASCII), positie-specs, viewport-content (volledige copy), SEO-structuur (semantic HTML voorbeeld), interactie-en-animatie specs, mobile-parking-note, open items, changelog.
+
+### Assets en infrastructuur
+
+- Domain `limaidesign.com` actief op Namecheap
+- Resend account verified voor `limaidesign.com` (EU-west-1 region), DKIM en SPF en DMARC DNS records staan
+- Google Workspace actief, twee gebruikers: `olivier@limaidesign.com` en `abdul@limaidesign.com`
+- Team foto's: `public/team/olivier.webp` en `public/team/abdul.webp`
+- RESEND_API_KEY veilig opgeslagen, klaar om in .env.local te plaatsen in substep 2
 
 ---
 
@@ -86,20 +95,20 @@ Elke draft bevat: layout-wireframe (ASCII), positie-specs, viewport-content (vol
 
 ### Verplicht (zonder dit kan implementatie niet starten)
 
-1. **Foto Olivier:** 4:5 ratio (bv. 1200x1500 of 1600x2000), webp of jpg, plaatsen op `public/biomes/puna/olivier.webp`
-2. **Foto Abdul:** zelfde specs, plaatsen op `public/biomes/puna/abdul.webp`
-3. **Resend account:** aangemaakt op resend.com (gratis tier, 100 mails per dag voldoende voor launch)
-4. **`RESEND_API_KEY`** gegenereerd en in `.env.local` (en later in Vercel-environment)
-5. **`CONTACT_EMAIL=o.dearmenteras1@gmail.com`** in `.env.local`
+1. **Foto Olivier:** [DONE] foto's op `public/team/olivier.webp` en `public/team/abdul.webp`
+2. **Foto Abdul:** [DONE] foto's op `public/team/olivier.webp` en `public/team/abdul.webp`
+3. **Resend account:** [DONE] Resend account aangemaakt
+4. **`RESEND_API_KEY`:** [DONE] RESEND_API_KEY gegenereerd, API key privaat opgeslagen buiten de repo
+5. **`CONTACT_EMAIL`:** [DONE] CONTACT_EMAIL value bepaald: olivier@limaidesign.com (vervangt gmail)
 
 ### Beslissingen om te bevestigen vóór substep 2
 
-6. **Abdul's derde feit voor Puna meta-strip:** `creatief`, `ontwerper`, of iets specifiekers. Olivier vraagt Abdul tijdens touchpoint 1
-7. **`/over-ons` link in Puna VP2:** Optie A tijdelijk uitschakelen of grijs / Optie B minimale placeholder-pagina nu meebouwen. Aanbeveling: B om broken-feel te vermijden
+6. **Abdul's derde feit voor Puna meta-strip:** [DONE] designer
+7. **`/over-ons` link in Puna VP2:** [DONE] /over-ons krijgt placeholder pagina (optie B), regel uitgebreid: elke toekomstige interne link naar een niet-bestaande subpagina krijgt een placeholder pagina met minimale content
 
 ### Optioneel (niet blokkerend)
 
-8. **Domain finalize:** `limai.nl` of alternatief. Niet nodig voor implementatie, wel voor Resend domain-verification (betere deliverability) en Vercel-deploy met eigen domein
+8. **Domain:** [DONE] limaidesign.com actief, DNS geconfigureerd voor Resend (EU region) en Google Workspace
 9. **LimAI logo:** waarschijnlijk al in `public/`. Niet kritisch voor homepage, want LimAI is al de hero-titel
 
 ---
