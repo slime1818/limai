@@ -44,9 +44,10 @@ function BiomeLayer({
         : isLast
           ? [0, 1, 1, 1]
           : [0, 1, 1, 0];
+  // Fade-in begins 540px before section-top (1/3 - 0.2), reaches plateau at section-top (1/3), fade-out begins at 0.8 for 540px symmetrical zone.
   const opacity = useTransform(
     viewProgress,
-    [0, 0.3, 0.7, 1],
+    [(1 / 3) - 0.2, 1 / 3, 0.8, 1],
     opacityOutput,
   );
 
