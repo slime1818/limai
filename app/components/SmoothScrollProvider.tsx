@@ -8,6 +8,9 @@ export function SmoothScrollProvider({ children }: { children: ReactNode }) {
     const lenis = new Lenis({
       duration: 1.2,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      // Laat touch-scroll aan native iOS/Android momentum, Lenis alleen voor desktop wheel.
+      // Voorkomt Lenis vs native scroll conflict op mobile dat blokkerig scroll-gedrag veroorzaakte.
+      touchMultiplier: 0,
     });
 
     let rafId: number;
