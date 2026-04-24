@@ -1,5 +1,7 @@
+import Image from "next/image";
 import type { RefObject } from "react";
 import type { Biome } from "../data/biomes";
+import { BiomeScrim } from "./BiomeScrim";
 
 export function BiomeSection({
   biome,
@@ -18,6 +20,20 @@ export function BiomeSection({
       ref={sectionRef}
       className="relative w-full h-[200dvh] pointer-coarse:h-[100dvh]"
     >
+      {/* Diagnostic 1b: mobile inline fallback image + scrim (desktop gebruikt ImageStack
+          fixed-position layers, die zijn verborgen op coarse pointer). Test of
+          fixed-position ImageStack de iOS reversal trigger is. */}
+      <div className="pointer-fine:hidden absolute inset-0 z-0 overflow-hidden">
+        <Image
+          src={biome.image}
+          alt={biome.imageAlt}
+          fill
+          sizes="100vw"
+          className="object-cover"
+          priority={biome.id === "apu"}
+        />
+        <BiomeScrim biome={biome} />
+      </div>
       <div className="absolute inset-0 z-10">
         <div className="h-dvh pointer-coarse:h-1/2 flex items-center px-8 md:px-16 lg:px-24">
           <div className="max-w-2xl">
