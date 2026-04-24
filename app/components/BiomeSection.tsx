@@ -14,7 +14,10 @@ export function BiomeSection({
   renderContent?: boolean;
 }) {
   return (
-    <section ref={sectionRef} className="relative w-full h-[200dvh]">
+    <section
+      ref={sectionRef}
+      className="relative w-full h-[200dvh] pointer-coarse:h-[100dvh]"
+    >
       <div className="absolute inset-0 z-10">
         <div className="h-dvh flex items-center px-8 md:px-16 lg:px-24">
           <div className="max-w-2xl">
