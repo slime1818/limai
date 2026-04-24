@@ -1,70 +1,15 @@
-"use client";
-
-import Image from "next/image";
-import {
-  motion,
-  useReducedMotion,
-  useScroll,
-  useTransform,
-} from "motion/react";
-import { useRef } from "react";
+import type { RefObject } from "react";
 import type { Biome } from "../data/biomes";
 
 export function BiomeSection({
   biome,
-  priority = false,
+  sectionRef,
 }: {
   biome: Biome;
-  priority?: boolean;
+  sectionRef: RefObject<HTMLElement | null>;
 }) {
-  const sectionRef = useRef<HTMLElement>(null);
-  const shouldReduceMotion = useReducedMotion();
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start start", "end end"],
-  });
-  const y = useTransform(
-    scrollYProgress,
-    [0, 1],
-    shouldReduceMotion ? ["0%", "0%"] : ["-8%", "8%"],
-  );
-
   return (
     <section ref={sectionRef} className="relative w-full h-[200dvh]">
-      <div className="sticky top-0 h-dvh w-full">
-        <div className="relative h-full w-full overflow-hidden">
-          <motion.div
-            className="absolute inset-x-0 top-[-10%] bottom-[-10%] will-change-transform"
-            style={{ y }}
-          >
-            <Image
-              src={biome.image}
-              alt={biome.imageAlt}
-              fill
-              priority={priority}
-              sizes="100vw"
-              className="object-cover"
-            />
-          </motion.div>
-          {/* F6 horizontal scrim. Selva needs variant, TOP-framing canopy clashes with left-fade. Must-do gate before T3 integration, see Fase 2 substep 13. */}
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute inset-0 z-0 hidden md:block"
-            style={{
-              background:
-                "linear-gradient(90deg, rgba(26,22,18,0.68) 0%, rgba(26,22,18,0.45) 30%, rgba(26,22,18,0.08) 55%, rgba(26,22,18,0.0) 72%)",
-            }}
-          />
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute inset-0 z-0 md:hidden"
-            style={{
-              background:
-                "linear-gradient(180deg, rgba(26,22,18,0.70) 0%, rgba(26,22,18,0.40) 100%)",
-            }}
-          />
-        </div>
-      </div>
       <div className="absolute inset-0 z-10">
         <div className="h-dvh flex items-center px-8 md:px-16 lg:px-24">
           <div className="max-w-2xl">
