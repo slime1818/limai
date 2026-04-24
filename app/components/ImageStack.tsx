@@ -46,7 +46,7 @@ function BiomeLayer({
   const y = useTransform(
     panProgress,
     [0, 1],
-    shouldReduceMotion ? ["0%", "0%"] : ["-8%", "8%"],
+    shouldReduceMotion ? ["0%", "0%"] : ["-15%", "15%"],
   );
 
   const renderImage = isFirst || shouldDecode;
@@ -59,7 +59,7 @@ function BiomeLayer({
       {renderImage ? (
         <>
           <motion.div
-            className="absolute inset-x-0 top-[-10%] bottom-[-10%] will-change-transform"
+            className="absolute inset-x-0 top-[-20%] bottom-[-20%] will-change-transform"
             style={{ y }}
           >
             <Image
