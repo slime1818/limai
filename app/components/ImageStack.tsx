@@ -10,6 +10,7 @@ import {
 } from "motion/react";
 import type { RefObject } from "react";
 import type { Biome } from "../data/biomes";
+import { useIsCoarsePointer } from "../hooks/useIsCoarsePointer";
 import { BiomeScrim } from "./BiomeScrim";
 
 function BiomeLayer({
@@ -28,6 +29,7 @@ function BiomeLayer({
     once: true,
   });
   const shouldReduceMotion = useReducedMotion();
+  const isCoarsePointer = useIsCoarsePointer();
 
   // Opacity crossfade via widened thresholds: fade-in 0-0.3, plateau 0.3-0.7, fade-out 0.7-1.
   // isFirst (Apu) skips fade-in so pageload shows full opacity immediately.
@@ -56,10 +58,14 @@ function BiomeLayer({
     target: sectionRef,
     offset: ["start start", "end end"],
   });
+  // Altitude-pan uit op coarse pointer (touch devices) voor mobile GPU-compositing
+  // reductie. 6 fixed-position layers plus parallel transforms stapelen op mobile GPU,
+  // zichtbaar als progressieve scroll-stuttering vanaf biome 4+ op iPhone. Desktop
+  // (fine pointer) behoudt volle -15% tot +15% range.
   const y = useTransform(
     panProgress,
     [0, 1],
-    shouldReduceMotion ? ["0%", "0%"] : ["-15%", "15%"],
+    shouldReduceMotion || isCoarsePointer ? ["0%", "0%"] : ["-15%", "15%"],
   );
 
   const renderImage = isFirst || shouldDecode;
