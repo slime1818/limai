@@ -19,7 +19,7 @@ export function BiomeSection({
       className="relative w-full h-[200dvh] pointer-coarse:h-[100dvh]"
     >
       <div className="absolute inset-0 z-10">
-        <div className="h-dvh flex items-center px-8 md:px-16 lg:px-24">
+        <div className="h-dvh pointer-coarse:h-1/2 flex items-center px-8 md:px-16 lg:px-24">
           <div className="max-w-2xl">
             <h1 className="font-display text-warm-white text-6xl md:text-8xl lg:text-9xl leading-none tracking-tight">
               {biome.title}
@@ -29,7 +29,7 @@ export function BiomeSection({
             </p>
           </div>
         </div>
-        <div className="h-dvh flex items-start px-8 md:px-16 lg:px-24">
+        <div className="h-dvh pointer-coarse:h-1/2 flex items-start px-8 md:px-16 lg:px-24">
           <div className="max-w-xl mt-32">
             {biome.viewport2Teaser !== null ? (
               <p className="text-base md:text-lg text-warm-white/90 leading-relaxed">
