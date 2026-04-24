@@ -2,6 +2,7 @@
 
 import { useEffect, type ReactNode } from "react";
 import Lenis from "lenis";
+import { debugCounters } from "../lib/debug-counters";
 
 export function SmoothScrollProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
@@ -16,6 +17,7 @@ export function SmoothScrollProvider({ children }: { children: ReactNode }) {
     let rafId: number;
     function raf(time: number) {
       lenis.raf(time);
+      debugCounters.lenisRaf++;
       rafId = requestAnimationFrame(raf);
     }
     rafId = requestAnimationFrame(raf);
