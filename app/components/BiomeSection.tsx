@@ -1,4 +1,13 @@
+"use client";
+
 import Image from "next/image";
+import {
+  motion,
+  useReducedMotion,
+  useScroll,
+  useTransform,
+} from "motion/react";
+import { useRef } from "react";
 import type { Biome } from "../data/biomes";
 
 export function BiomeSection({
@@ -8,18 +17,35 @@ export function BiomeSection({
   biome: Biome;
   priority?: boolean;
 }) {
+  const sectionRef = useRef<HTMLElement>(null);
+  const shouldReduceMotion = useReducedMotion();
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start start", "end end"],
+  });
+  const y = useTransform(
+    scrollYProgress,
+    [0, 1],
+    shouldReduceMotion ? ["0%", "0%"] : ["-8%", "8%"],
+  );
+
   return (
-    <section className="relative w-full h-[200dvh]">
+    <section ref={sectionRef} className="relative w-full h-[200dvh]">
       <div className="sticky top-0 h-dvh w-full">
         <div className="relative h-full w-full overflow-hidden">
-          <Image
-            src={biome.image}
-            alt={biome.imageAlt}
-            fill
-            priority={priority}
-            sizes="100vw"
-            className="object-cover"
-          />
+          <motion.div
+            className="absolute inset-x-0 top-[-10%] bottom-[-10%] will-change-transform"
+            style={{ y }}
+          >
+            <Image
+              src={biome.image}
+              alt={biome.imageAlt}
+              fill
+              priority={priority}
+              sizes="100vw"
+              className="object-cover"
+            />
+          </motion.div>
           {/* F6 horizontal scrim. Selva needs variant, TOP-framing canopy clashes with left-fade. Must-do gate before T3 integration, see Fase 2 substep 13. */}
           <div
             aria-hidden="true"
