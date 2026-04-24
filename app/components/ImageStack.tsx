@@ -4,6 +4,7 @@ import Image from "next/image";
 import {
   motion,
   useInView,
+  useReducedMotion,
   useScroll,
   useTransform,
 } from "motion/react";
@@ -24,16 +25,28 @@ function BiomeLayer({
     margin: "50% 0px",
     once: true,
   });
-  const { scrollYProgress } = useScroll({
+  const shouldReduceMotion = useReducedMotion();
+
+  // Opacity tracks own section visibility in viewport (9a narrow-step, 9c widens).
+  const { scrollYProgress: viewProgress } = useScroll({
     target: sectionRef,
     offset: ["start end", "end start"],
   });
-  // 9a narrow-step opacity: 1 during own section in viewport, 0 otherwise.
-  // 9c will widen transition zones for proper crossfade.
   const opacity = useTransform(
-    scrollYProgress,
+    viewProgress,
     [0, 0.333, 0.99, 1],
     [0, 1, 1, 0],
+  );
+
+  // Altitude-pan tracks own section scroll progress, -8% to +8% translateY.
+  const { scrollYProgress: panProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start start", "end end"],
+  });
+  const y = useTransform(
+    panProgress,
+    [0, 1],
+    shouldReduceMotion ? ["0%", "0%"] : ["-8%", "8%"],
   );
 
   const renderImage = isFirst || shouldDecode;
@@ -45,14 +58,19 @@ function BiomeLayer({
     >
       {renderImage ? (
         <>
-          <Image
-            src={biome.image}
-            alt={biome.imageAlt}
-            fill
-            priority={isFirst}
-            sizes="100vw"
-            className="object-cover"
-          />
+          <motion.div
+            className="absolute inset-x-0 top-[-10%] bottom-[-10%] will-change-transform"
+            style={{ y }}
+          >
+            <Image
+              src={biome.image}
+              alt={biome.imageAlt}
+              fill
+              priority={isFirst}
+              sizes="100vw"
+              className="object-cover"
+            />
+          </motion.div>
           <BiomeScrim biome={biome} />
         </>
       ) : null}
