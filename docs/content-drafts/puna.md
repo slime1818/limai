@@ -6,6 +6,60 @@
 
 ---
 
+## Layout wireframe
+
+### Viewport 1: Olivier
+
+```
+┌─────────────────────────────────────────────────────┐
+│  ─ 02 · Wie we zijn · 1 / 2                         │
+│                                                     │
+│  Olivier                (Fraunces, XL)              │
+│  Founder & lead architect   (Inter mono, copper)    │
+│                                            ┌─────┐  │
+│  body ~~~~~~~~~~~~~~~~~~~                  │     │  │
+│  ~~~~~~~~~~~~~~~~~~~~~~~~                  │foto │  │
+│  ~~~~~~~~~~~                               │     │  │
+│                                            │     │  │
+│  18 · Amsterdam · feit                     └─────┘  │
+│                                                     │
+└─────────────────────────────────────────────────────┘
+```
+
+### Viewport 2: Abdul
+
+```
+┌─────────────────────────────────────────────────────┐
+│  ─ 02 · Wie we zijn · 2 / 2                         │
+│                                                     │
+│  Abdul                  (Fraunces, XL)              │
+│  Founder & production lead  (Inter mono, copper)    │
+│                                            ┌─────┐  │
+│  body ~~~~~~~~~~~~~~~~~~~                  │     │  │
+│  ~~~~~~~~~~~~~~~~~~~~~~~~                  │foto │  │
+│  ~~~~~~~~~~~                               │     │  │
+│                                            │     │  │
+│  19 · Amsterdam · creatief                 └─────┘  │
+│                                                     │
+│  Lees ons verhaal →                                 │
+│                                                     │
+└─────────────────────────────────────────────────────┘
+```
+
+### Positie-specs
+
+**Beide viewports gebruiken dezelfde structuur, met alleen de content en het portret verschillend:**
+
+- **Eyebrow:** top-left, Inter monospace 11-12px, copper (#b87f4a), met korte streep ervoor (letter-spacing 0.08em)
+- **Naam:** groot, Fraunces display (60-80px op desktop), onder eyebrow. Initieel hidden, wordt onthuld via signature-reveal animatie bij scroll-in
+- **Rol:** direct onder naam, Inter monospace klein (13-14px), copper
+- **Body:** Inter 16-18px, 3-4 regels, links uitgelijnd binnen de F6 scrim zone
+- **Meta-strip:** onderaan content-kolom, Inter monospace klein (11-12px), copper-secondary met middle-dot separators
+- **CTA** (alleen VP2): onder meta-strip, Inter 14px met pijl-arrow, hover-underline in copper
+- **Foto:** rechterhelft van de viewport, buiten F6 scrim maar met rand die deels in de scrim overlapt. Grootte ongeveer 280 x 380px op desktop. Card-borders 0.5px copper met subtle 3D tilt-on-hover (max 7 graden rotatie)
+
+---
+
 ## Viewport 1: Olivier
 
 - **Eyebrow:** 02 · Wie we zijn · 1 / 2
