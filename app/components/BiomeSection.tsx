@@ -18,7 +18,7 @@ export function BiomeSection({
   return (
     <section
       ref={sectionRef}
-      className="relative w-full h-[200dvh] pointer-coarse:h-[100dvh]"
+      className="relative w-full h-[200dvh] pointer-coarse:h-[100vh]"
     >
       {/* Diagnostic 1b: mobile inline fallback image + scrim (desktop gebruikt ImageStack
           fixed-position layers, die zijn verborgen op coarse pointer). Test of
