@@ -7,8 +7,6 @@ export function BiomeSection({
 }: {
   biome: Biome;
   sectionRef: RefObject<HTMLElement | null>;
-  // renderContent prop accepteerd maar genegeerd (legacy pas 4).
-  renderContent?: boolean;
 }) {
   return (
     <section ref={sectionRef} className="relative w-full h-[200vh]">
