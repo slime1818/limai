@@ -151,6 +151,7 @@ Abdul's derde feit: nu "creatief" als placeholder, vervangen na Abdul's review
 Olivier's derde feit: nu "bouwt sinds zijn tienerjaren" als gok, bevestigen of vervangen
 /over-ons pagina: aparte werksessie, valt buiten substep 1
 - /over-ons placeholder pagina wordt meegebouwd in substep 2 (lege page met alleen een minimale heading, inhoud komt later)
+- Olivier foto-keuze: twee varianten beschikbaar in public/team/ (olivier-a.webp en olivier-b.webp). Tijdens substep 2 implementatie A/B testen, beste variant kiezen, andere weghalen of bewaren voor over-ons pagina
 
 
 Changelog
