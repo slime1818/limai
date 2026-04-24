@@ -12,7 +12,6 @@ import {
 import { useEffect, useState, type RefObject } from "react";
 import type { Biome } from "../data/biomes";
 import { useIsCoarsePointer } from "../hooks/useIsCoarsePointer";
-import { debugCounters } from "../lib/debug-counters";
 import { BiomeScrim } from "./BiomeScrim";
 
 function BiomeLayer({
@@ -63,7 +62,6 @@ function BiomeLayer({
   // visible voor smooth render gedurende full page-scroll.
   const [isMobileVisible, setIsMobileVisible] = useState(true);
   useMotionValueEvent(opacity, "change", (v) => {
-    debugCounters.motionEvents++;
     if (!isCoarsePointer) return;
     const nowVisible = v > 0.01;
     setIsMobileVisible((prev) => (prev !== nowVisible ? nowVisible : prev));
