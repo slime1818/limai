@@ -2,8 +2,9 @@ import type { Biome } from "../data/biomes";
 
 export function BiomeScrim({ biome }: { biome: Biome }) {
   if (biome.id === "selva") {
-    // TODO Fase 2 substep 13: Selva renders no F6 scrim because TOP-framing canopy plus pikzwart schilder-schaduw bottom-left clashen met left-fade.
-    // Scrim-alternatief (text-shadow op content-layer, radial-gradient, of rotated F6) wordt daar geland. Spec in docs/status/2026-04-25-fase-2-start.md substep 13.
+    // Selva rendert geen F6 scrim: TOP-framing canopy plus pikzwart schilder-schaduw
+    // bottom-left clashen met left-fade. Text-shadow alternatief landt op content-layer
+    // in BiomeSection (Variant A per commit 1dea0f4 + substep 13).
     return null;
   }
   return (
