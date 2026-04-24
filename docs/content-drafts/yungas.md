@@ -1,4 +1,4 @@
-# Yungas viewport content draft
+# Yungas viewport draft (design + content)
 
 **Layout:** Twee viewports. VP1 heeft drie pricing-cards met toggle Upfront / Per maand. VP2 heeft twee losse service-cards voor maatwerk.
 
@@ -6,7 +6,73 @@
 
 ---
 
-## Viewport 1: Pakketten
+## Layout wireframe
+
+### Viewport 1: drie pakketten
+
+```┌─────────────────────────────────────────────────────┐
+│  ─ 03 · Wat we bouwen                               │
+│                                                     │
+│  Drie manieren om te beginnen.     (Fraunces, XL)   │
+│                                                     │
+│              [ Upfront ] [ Per maand ]              │
+│       Per maand: 12 termijnen, rest direct          │
+│                                                     │
+│  ┌──────────┐    ┌──────────┐    ┌──────────┐      │
+│  │ Landing  │    │ Compacte │    │ Volledige│      │
+│  │          │    │          │    │          │      │
+│  │  €400    │    │  €700    │    │  €1.000  │      │
+│  │          │    │          │    │          │      │
+│  │  body    │    │  body    │    │  body    │      │
+│  │  ~~      │    │  ~~      │    │  ~~      │      │
+│  │          │    │          │    │          │      │
+│  │ footnote │    │ footnote │    │ footnote │      │
+│  └──────────┘    └──────────┘    └──────────┘      │
+│                                                     │
+└─────────────────────────────────────────────────────┘
+
+### Viewport 2: twee maatwerk-cards┌─────────────────────────────────────────────────────┐
+│  ─ 03 · Meer dan een website                        │
+│                                                     │
+│  Of iets groters.              (Fraunces, XL)       │
+│                                                     │
+│   ┌──────────────────┐    ┌──────────────────┐     │
+│   │ AI in je bedrijf │    │ Shoots en socials│     │
+│   │                  │    │                  │     │
+│   │  body ~~~~~~     │    │  body ~~~~~~     │     │
+│   │  ~~~~~~          │    │  ~~~~~~          │     │
+│   │                  │    │                  │     │
+│   │                  │    │                  │     │
+│   │ Neem contact op →│    │ Neem contact op →│     │
+│   └──────────────────┘    └──────────────────┘     │
+│                                                     │
+└─────────────────────────────────────────────────────┘
+
+### Positie-specs
+
+**Viewport 1:**
+
+- **Eyebrow:** top-left, Inter monospace 11-12px, copper (#b87f4a), met korte streep ervoor (letter-spacing 0.08em)
+- **Headline:** onder eyebrow, Fraunces display, groot (40-56px op desktop)
+- **Toggle:** horizontaal gecentreerd, pill-stijl met twee segmenten. Actief segment krijgt copper fill-opacity 0.35, inactief segment transparent met copper text
+- **Regel onder toggle:** Inter small 12-13px, kleur rgba(255,255,255,0.55), gecentreerd
+- **3 cards:** gelijke breedte, horizontaal naast elkaar met gelijke gap, gelijke hoogte
+  - Card border: 0.5px copper met rx=4px
+  - Padding: 1.5rem intern
+  - Structuur: naam (Inter mono klein, copper bovenaan), prijs (Fraunces XXL, groot midden), body (Inter 2-3 regels), inclusief-lijst (kleine bullets), footnote (Inter small secondary onderaan)
+
+**Viewport 2:**
+
+- **Eyebrow en headline:** zelfde styling als VP1
+- **2 service cards:** groter dan VP1 cards, ongeveer 1.5x zo breed, horizontaal naast elkaar
+  - Card border: 0.5px copper met rx=4px
+  - Padding: 1.5rem intern
+  - Structuur: naam bovenaan (Inter mono klein, copper), body 3-4 regels (Inter), CTA links-onder met pijl-arrow
+  - Geen prijs
+
+---
+
+## Viewport 1: Pakketten (content)
 
 - **Eyebrow:** 03 · Wat we bouwen
 - **Headline** (Fraunces, display): Drie manieren om te beginnen.
@@ -39,7 +105,7 @@
 
 ---
 
-## Viewport 2: Andere diensten
+## Viewport 2: Andere diensten (content)
 
 - **Eyebrow:** 03 · Meer dan een website
 - **Headline** (Fraunces, display): Of iets groters.
@@ -58,119 +124,102 @@
 
 ## SEO-structuur
 
-```html
-<section id="yungas" aria-labelledby="yungas-heading">
-  <h2 id="yungas-heading" class="sr-only">Wat we bouwen</h2>
-
-  <article aria-labelledby="pricing-heading">
+```html<section id="yungas" aria-labelledby="yungas-heading">
+  <h2 id="yungas-heading" class="sr-only">Wat we bouwen</h2>  <article aria-labelledby="pricing-heading">
     <p class="eyebrow">03 · Wat we bouwen</p>
-    <h3 id="pricing-heading">Drie manieren om te beginnen</h3>
-
-    <div role="tablist" aria-label="Prijsweergave">
-      <button role="tab" aria-selected="true">Upfront</button>
-      <button role="tab" aria-selected="false">Per maand</button>
-    </div>
-
-    <div class="pricing-cards">
-      <article>
-        <h4>Landing page</h4>
-        <p class="price">€400 upfront, of €50 per maand gedurende 12 maanden</p>
-        <p>Eén pagina, één boodschap, één actie ...</p>
-      </article>
-      <article>
-        <h4>Compacte site</h4>
-        <p class="price">€700 upfront, of €70 per maand gedurende 12 maanden</p>
-        <p>Drie pagina's met basis-SEO ...</p>
-      </article>
-      <article>
-        <h4>Volledige site</h4>
-        <p class="price">€1.000 upfront, of €100 per maand gedurende 12 maanden</p>
-        <p>Vijf pagina's, volledige SEO ...</p>
-      </article>
-    </div>
+    <h3 id="pricing-heading">Drie manieren om te beginnen</h3><div role="tablist" aria-label="Prijsweergave">
+  <button role="tab" aria-selected="true">Upfront</button>
+  <button role="tab" aria-selected="false">Per maand</button>
+</div><div class="pricing-cards">
+  <article>
+    <h4>Landing page</h4>
+    <p class="price">€400 upfront, of €50 per maand gedurende 12 maanden</p>
+    <p>Eén pagina, één boodschap, één actie ...</p>
   </article>
-
-  <article aria-labelledby="more-heading">
+  <article>
+    <h4>Compacte site</h4>
+    <p class="price">€700 upfront, of €70 per maand gedurende 12 maanden</p>
+    <p>Drie pagina's met basis-SEO ...</p>
+  </article>
+  <article>
+    <h4>Volledige site</h4>
+    <p class="price">€1.000 upfront, of €100 per maand gedurende 12 maanden</p>
+    <p>Vijf pagina's, volledige SEO ...</p>
+  </article>
+</div>
+  </article>  <article aria-labelledby="more-heading">
     <p class="eyebrow">03 · Meer dan een website</p>
-    <h3 id="more-heading">Of iets groters</h3>
-
-    <article>
-      <h4>AI in je bedrijf</h4>
-      <p>Workflows automatiseren ...</p>
-      <a href="/contact">Neem contact op</a>
-    </article>
-    <article>
-      <h4>Shoots en socials</h4>
-      <p>Professionele fotoshoot plus socials ...</p>
-      <a href="/contact">Neem contact op</a>
-    </article>
+    <h3 id="more-heading">Of iets groters</h3><article>
+  <h4>AI in je bedrijf</h4>
+  <p>Workflows automatiseren ...</p>
+  <a href="/contact">Neem contact op</a>
+</article>
+<article>
+  <h4>Shoots en socials</h4>
+  <p>Professionele fotoshoot plus socials ...</p>
+  <a href="/contact">Neem contact op</a>
+</article>
   </article>
 </section>
-```
+````
+Hiërarchie-principes:
 
-**Hiërarchie-principes:**
+één visible H1 op de homepage, in de Apu hero sectie
+Yungas-sectie krijgt H2 "Wat we bouwen", als sr-only boven beide viewports
+VP1 en VP2 krijgen elk een H3 (de viewport-headline)
+elke card krijgt een H4 met pakket- of dienstnaam, voor Google en voor LLM-crawlers
+prijzen als <p class="price"> met leesbare zin en concrete getallen, zodat crawlers en AI ze kunnen oppakken
 
-- één visible H1 op de homepage, in de Apu hero sectie
-- Yungas-sectie krijgt H2 "Wat we bouwen", als sr-only boven beide viewports
-- VP1 en VP2 krijgen elk een H3 (de viewport-headline)
-- elke card krijgt een H4 met pakket- of dienstnaam, voor Google en voor LLM-crawlers
-- prijzen als `<p class="price">` met leesbare zin en concrete getallen, zodat crawlers en AI ze kunnen oppakken
 
----
+Interactie en animatie
+Pricing-toggle (Upfront / Per maand)
 
-## Interactie en animatie
+twee-state toggle boven de drie pricing-cards
+klikken switcht het zichtbare prijsblok in alle drie cards tegelijk
+animatie: crossfade van het prijsblok, ongeveer 250ms, ease-in-out
+keyboard accessibility: role="tablist", pijltjes wisselen de state
+initiële state: Upfront actief
 
-### Pricing-toggle (Upfront / Per maand)
+Prijs-morph
 
-- twee-state toggle boven de drie pricing-cards
-- klikken switcht het zichtbare prijsblok in alle drie cards tegelijk
-- animatie: crossfade van het prijsblok, ongeveer 250ms, ease-in-out
-- keyboard accessibility: `role="tablist"`, pijltjes wisselen de state
-- initiële state: Upfront actief
+bij toggle faden oude cijfers uit en nieuwe cijfers in op dezelfde plek
+alternatief iets spannender: cijfers sliden verticaal (odometer-stijl) van oude naar nieuwe waarde
+duur ongeveer 300ms, cubic-bezier ease-out
+NB: verhoog duur niet, anders voelt het traag bij herhaald klikken
 
-### Prijs-morph
+Card hover-effect
 
-- bij toggle faden oude cijfers uit en nieuwe cijfers in op dezelfde plek
-- alternatief iets spannender: cijfers sliden verticaal (odometer-stijl) van oude naar nieuwe waarde
-- duur ongeveer 300ms, cubic-bezier ease-out
-- NB: verhoog duur niet, anders voelt het traag bij herhaald klikken
+bewust niet dezelfde tilt als Puna, om variatie tussen biomes te houden
+subtiele lift van 4px plus border-highlight in copper (#b87f4a)
+transition ongeveer 200ms
+cursor: pointer
+op mobile: geen hover, wel een actieve state bij tap
 
-### Card hover-effect
+Featured card (optioneel, later)
 
-- bewust niet dezelfde tilt als Puna, om variatie tussen biomes te houden
-- subtiele lift van 4px plus border-highlight in copper (#b87f4a)
-- transition ongeveer 200ms
-- cursor: pointer
-- op mobile: geen hover, wel een actieve state bij tap
+nu neutraal gelaten. Alle drie cards gelijkwaardig weergegeven
+later eventueel Compacte site markeren als "meest gekozen" met een lichte copper rand, zodra klantdata dat onderbouwt
 
-### Featured card (optioneel, later)
 
-- nu neutraal gelaten. Alle drie cards gelijkwaardig weergegeven
-- later eventueel Compacte site markeren als "meest gekozen" met een lichte copper rand, zodra klantdata dat onderbouwt
+Mobile
 
----
+dezelfde tekstuele content als desktop, voor content-parity onder mobile-first indexing
+layout: cards onder elkaar gestapeld, toggle bovenaan VP1
+VP2 service-cards ook gestapeld onder elkaar
+hover-lift vervangen door actieve state bij tap
+geen horizontal carousel, gewone verticale scroll
 
-## Mobile
 
-- dezelfde tekstuele content als desktop, voor content-parity onder mobile-first indexing
-- layout: cards onder elkaar gestapeld, toggle bovenaan VP1
-- VP2 service-cards ook gestapeld onder elkaar
-- hover-lift vervangen door actieve state bij tap
-- geen horizontal carousel, gewone verticale scroll
+Open items
 
----
+prijzen bevestigen: nu €400 / €700 / €1.000 upfront en €50 / €70 / €100 per maand. Olivier overweegt later ophogen naar "professional" bandbreedte (€750 / €1.500 / €2.500) als eerste opdrachten binnenlopen
+Landing +50% dissonantie: upfront €400 versus €50 x 12 = €600 is +50%, terwijl Compacte en Volledige op +20% zitten. Niet fataal, later eventueel €500 upfront maken of maandprijs op €40 zetten
+algemene voorwaarden: 12-termijnen-regel en opzeg-clausule (100% resterende termijnen direct opeisbaar) moeten juridisch in AV staan. Regelen via KvK-template, Ligo, of advocaat. Linken vanuit de toggle-footnote naar een /voorwaarden pagina
+AI-card body: huidige tekst is generiek. Later aanscherpen met één of twee concrete cases zodra Olivier en Abdul weten welke AI-integraties ze standaard aanbieden
+Shoots-card body: idem. Voorbeeld toevoegen zodra eerste klant klaar is
+featured card: beslissing uitgesteld tot klantdata ondersteunt welk pakket "meest gekozen" is
 
-## Open items
 
-- **prijzen bevestigen:** nu €400 / €700 / €1.000 upfront en €50 / €70 / €100 per maand. Olivier overweegt later ophogen naar "professional" bandbreedte (€750 / €1.500 / €2.500) als eerste opdrachten binnenlopen
-- **Landing +50% dissonantie:** upfront €400 versus €50 x 12 = €600 is +50%, terwijl Compacte en Volledige op +20% zitten. Niet fataal, later eventueel €500 upfront maken of maandprijs op €40 zetten
-- **algemene voorwaarden:** 12-termijnen-regel en opzeg-clausule (100% resterende termijnen direct opeisbaar) moeten juridisch in AV staan. Regelen via KvK-template, Ligo, of advocaat. Linken vanuit de toggle-footnote naar een /voorwaarden pagina
-- **AI-card body:** huidige tekst is generiek. Later aanscherpen met één of twee concrete cases zodra Olivier en Abdul weten welke AI-integraties ze standaard aanbieden
-- **Shoots-card body:** idem. Voorbeeld toevoegen zodra eerste klant klaar is
-- **featured card:** beslissing uitgesteld tot klantdata ondersteunt welk pakket "meest gekozen" is
+Changelog
 
----
-
-## Changelog
-
-- 2026-04-24: eerste draft, chat-sessie Olivier en Claude
+2026-04-24: eerste draft met layout-wireframe, chat-sessie Olivier en Claude
