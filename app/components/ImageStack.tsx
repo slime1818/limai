@@ -59,7 +59,7 @@ function BiomeLayer({
       {renderImage ? (
         <>
           <motion.div
-            className="absolute inset-x-0 top-[-20%] bottom-[-20%] will-change-transform"
+            className="absolute inset-x-0 top-[-25%] bottom-[-25%] will-change-transform"
             style={{ y }}
           >
             <Image
