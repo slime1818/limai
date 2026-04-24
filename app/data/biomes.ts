@@ -5,6 +5,7 @@ export type Biome = {
   imageAlt: string;
   title: string;
   tagline: string;
+  viewport2Teaser: string | null;
   ctaLabel: string | null;
   ctaHref: string | null;
   subpage: string;
@@ -20,6 +21,7 @@ export const biomes: Biome[] = [
     title: "LimAI",
     tagline:
       "Sites voor merken met iets te zeggen. Een studio uit Amsterdam met wortels in de Andes.",
+    viewport2Teaser: null,
     ctaLabel: null,
     ctaHref: null,
     subpage: "-",
@@ -33,6 +35,8 @@ export const biomes: Biome[] = [
     title: "Wie we zijn",
     tagline:
       "Twee makers, één missie: digitale merken met karakter bouwen.",
+    viewport2Teaser:
+      "Achter LimAI staan twee makers met verschillende paden naar hetzelfde vak. Waarom we geloven dat digitale merken karakter mogen dragen, en hoe Amsterdam en de Andes dat bij ons hebben gevormd, vertellen we je graag.",
     ctaLabel: "Lees ons verhaal →",
     ctaHref: "/coming-soon",
     subpage: "/over-ons",
@@ -46,6 +50,8 @@ export const biomes: Biome[] = [
     title: "Wat we doen",
     tagline:
       "Websites, brand identity en strategie. Transparante pakketten, geen verrassingen.",
+    viewport2Teaser:
+      "Website en brand identity vormen de kern, strategie maakt ze samenhangend. Wat je krijgt en wat het kost, leggen we vooraf vast, zodat jij weet waar je aan toe bent.",
     ctaLabel: "Diensten & prijzen →",
     ctaHref: "/coming-soon",
     subpage: "/diensten",
@@ -59,6 +65,8 @@ export const biomes: Biome[] = [
     title: "Wat we maakten",
     tagline:
       "Een blik op recent werk voor merken die verschil willen maken.",
+    viewport2Teaser:
+      "Onze cases-pagina staat in de steigers. In plaats van alles te tonen wat we ooit maakten, selecteren we hier projecten waar verhaal en uitvoering samenkomen. De eerste landen binnenkort.",
     ctaLabel: "Naar portfolio →",
     ctaHref: "/cases",
     subpage: "/cases",
@@ -71,6 +79,8 @@ export const biomes: Biome[] = [
       "Woestijnlandschap met zandduinen en rotsbogen in warme bronstinten",
     title: "Hoe we werken",
     tagline: "Helder proces, open communicatie, geen omwegen.",
+    viewport2Teaser:
+      "Van kennismaking tot lancering werken we in duidelijke fases, met vaste momenten voor feedback en besluit. Je weet waar we staan, wat er volgt, en op welke momenten we iets van jou nodig hebben.",
     ctaLabel: "Ons proces →",
     ctaHref: "/coming-soon",
     subpage: "/proces",
@@ -83,6 +93,8 @@ export const biomes: Biome[] = [
       "Schemer-oceaan met verspreide vissersboten op goudbruine golven",
     title: "Laten we praten",
     tagline: "Klaar om je project te starten? Stuur ons een bericht.",
+    viewport2Teaser:
+      "Een mail hoeft geen dichtgetimmerde briefing te zijn. Schrijf in de vorm die past, van vage richting tot uitgewerkt plan. We lezen mee en reageren persoonlijk.",
     ctaLabel: "Start een project →",
     ctaHref: "/contact",
     subpage: "/contact",
