@@ -4,7 +4,7 @@ import { biomes } from "../data/biomes";
 const F6_SCRIM =
   "linear-gradient(90deg, rgba(26,22,18,0.68) 0%, rgba(26,22,18,0.45) 30%, rgba(26,22,18,0.08) 55%, rgba(26,22,18,0.0) 72%)";
 
-// Diagnostic: test-minimal + h-[200dvh] ipv h-screen. Geen sticky, geen fixed,
+// Diagnostic: test-minimal + h-[200vh] ipv h-screen. Geen sticky, geen fixed,
 // geen motion. Test of dvh-unit plus 2x viewport-height reversal triggert.
 export default function Test1DvhPage() {
   return (
@@ -15,7 +15,7 @@ export default function Test1DvhPage() {
       {biomes.map((biome, i) => (
         <section
           key={biome.id}
-          className="relative w-full h-[200dvh] overflow-hidden"
+          className="relative w-full h-[200vh] overflow-hidden"
         >
           <Image
             src={biome.image}

@@ -130,7 +130,7 @@ export function ImageStack({
   sectionRefs: Array<RefObject<HTMLElement | null>>;
 }) {
   return (
-    <div className="fixed inset-0 w-full h-dvh pointer-events-none z-0">
+    <div className="fixed inset-0 w-full h-screen pointer-events-none z-0">
       {biomes.map((biome, i) => (
         <BiomeLayer
           key={biome.id}

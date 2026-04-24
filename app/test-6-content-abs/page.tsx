@@ -69,7 +69,7 @@ function FixedLayer({
   );
 }
 
-// Diagnostic: test-5 plus absolute inset-0 content layers met 2-viewport h-dvh structuur
+// Diagnostic: test-5 plus absolute inset-0 content layers met 2-viewport h-screen structuur
 // binnen sections (matcht production BiomeSection pattern). Functioneel equivalent aan
 // production homepage (minus ScrollProgressDots, teasers, CTAs).
 export default function Test6ContentAbsPage() {
@@ -81,7 +81,7 @@ export default function Test6ContentAbsPage() {
       <div className="fixed top-2 right-2 bg-black/80 text-white font-mono text-xs p-2 z-50 rounded-sm pointer-events-none">
         test-6-content-abs
       </div>
-      <div className="fixed inset-0 w-full h-dvh pointer-events-none z-0">
+      <div className="fixed inset-0 w-full h-screen pointer-events-none z-0">
         {biomes.map((biome, i) => (
           <FixedLayer
             key={biome.id}
@@ -97,10 +97,10 @@ export default function Test6ContentAbsPage() {
         <section
           key={biome.id}
           ref={sectionRefs.current[i]}
-          className="relative w-full h-[200dvh]"
+          className="relative w-full h-[200vh]"
         >
           <div className="absolute inset-0 z-10">
-            <div className="h-dvh flex items-center px-8 md:px-16">
+            <div className="h-screen flex items-center px-8 md:px-16">
               <div className="max-w-2xl">
                 <h1 className="font-display text-warm-white text-5xl md:text-7xl leading-none tracking-tight">
                   {biome.title}
@@ -110,7 +110,7 @@ export default function Test6ContentAbsPage() {
                 </p>
               </div>
             </div>
-            <div className="h-dvh" />
+            <div className="h-screen" />
           </div>
         </section>
       ))}

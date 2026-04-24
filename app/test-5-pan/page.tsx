@@ -82,7 +82,7 @@ export default function Test5PanPage() {
       <div className="fixed top-2 right-2 bg-black/80 text-white font-mono text-xs p-2 z-50 rounded-sm pointer-events-none">
         test-5-pan
       </div>
-      <div className="fixed inset-0 w-full h-dvh pointer-events-none z-0">
+      <div className="fixed inset-0 w-full h-screen pointer-events-none z-0">
         {biomes.map((biome, i) => (
           <FixedLayer
             key={biome.id}
@@ -98,9 +98,9 @@ export default function Test5PanPage() {
         <section
           key={biome.id}
           ref={sectionRefs.current[i]}
-          className="relative w-full h-[200dvh]"
+          className="relative w-full h-[200vh]"
         >
-          <div className="h-dvh flex items-center px-8 md:px-16">
+          <div className="h-screen flex items-center px-8 md:px-16">
             <div className="max-w-2xl relative z-10">
               <h1 className="font-display text-warm-white text-5xl md:text-7xl leading-none tracking-tight">
                 {biome.title}

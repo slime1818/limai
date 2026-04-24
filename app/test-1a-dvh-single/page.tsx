@@ -4,9 +4,9 @@ import { biomes } from "../data/biomes";
 const F6_SCRIM =
   "linear-gradient(90deg, rgba(26,22,18,0.68) 0%, rgba(26,22,18,0.45) 30%, rgba(26,22,18,0.08) 55%, rgba(26,22,18,0.0) 72%)";
 
-// Diagnostic: test-1 met h-[100dvh] ipv h-[200dvh]. Isoleert dvh-unit van
+// Diagnostic: test-1 met h-[100vh] ipv h-[200vh]. Isoleert dvh-unit van
 // 2x viewport-height. Test-minimal = h-screen (100vh) = geen reversal.
-// Test-1 = h-[200dvh] = reversal. Deze test = h-[100dvh] = splits dvh vs 2x.
+// Test-1 = h-[200vh] = reversal. Deze test = h-[100vh] = splits dvh vs 2x.
 export default function Test1aDvhSinglePage() {
   return (
     <>
@@ -16,7 +16,7 @@ export default function Test1aDvhSinglePage() {
       {biomes.map((biome, i) => (
         <section
           key={biome.id}
-          className="relative w-full h-[100dvh] overflow-hidden"
+          className="relative w-full h-[100vh] overflow-hidden"
         >
           <Image
             src={biome.image}
