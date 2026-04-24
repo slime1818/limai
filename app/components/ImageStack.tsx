@@ -84,14 +84,13 @@ function BiomeLayer({
     target: sectionRef,
     offset: ["start start", "end end"],
   });
-  // Altitude-pan uit op coarse pointer (touch devices) voor mobile GPU-compositing
-  // reductie. 6 fixed-position layers plus parallel transforms stapelen op mobile GPU,
-  // zichtbaar als progressieve scroll-stuttering vanaf biome 4+ op iPhone. Desktop
-  // (fine pointer) behoudt volle -15% tot +15% range.
+  // Altitude-pan uniform op alle pointer-types. Commit A revert van mobile-specifieke
+  // simplifications voor desktop-parity test, gevolgd door global dvh-to-vh swap in
+  // commit B als dvh-hypothesis klopt.
   const y = useTransform(
     panProgress,
     [0, 1],
-    shouldReduceMotion || isCoarsePointer ? ["0%", "0%"] : ["-15%", "15%"],
+    shouldReduceMotion ? ["0%", "0%"] : ["-15%", "15%"],
   );
 
   const renderImage = isFirst || shouldDecode;
@@ -131,7 +130,7 @@ export function ImageStack({
   sectionRefs: Array<RefObject<HTMLElement | null>>;
 }) {
   return (
-    <div className="fixed inset-0 w-full h-dvh pointer-events-none z-0 pointer-coarse:hidden">
+    <div className="fixed inset-0 w-full h-dvh pointer-events-none z-0">
       {biomes.map((biome, i) => (
         <BiomeLayer
           key={biome.id}
