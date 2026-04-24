@@ -16,10 +16,12 @@ function BiomeLayer({
   biome,
   sectionRef,
   isFirst,
+  isLast,
 }: {
   biome: Biome;
   sectionRef: RefObject<HTMLElement | null>;
   isFirst: boolean;
+  isLast: boolean;
 }) {
   const shouldDecode = useInView(sectionRef, {
     margin: "50% 0px",
@@ -27,15 +29,25 @@ function BiomeLayer({
   });
   const shouldReduceMotion = useReducedMotion();
 
-  // Opacity tracks own section visibility in viewport (9a narrow-step, 9c widens).
+  // Opacity crossfade via widened thresholds: fade-in 0-0.3, plateau 0.3-0.7, fade-out 0.7-1.
+  // isFirst (Apu) skips fade-in so pageload shows full opacity immediately.
+  // isLast (Pacifico) skips fade-out so section-end doesn't reveal empty background.
   const { scrollYProgress: viewProgress } = useScroll({
     target: sectionRef,
     offset: ["start end", "end start"],
   });
+  const opacityOutput: [number, number, number, number] =
+    isFirst && isLast
+      ? [1, 1, 1, 1]
+      : isFirst
+        ? [1, 1, 1, 0]
+        : isLast
+          ? [0, 1, 1, 1]
+          : [0, 1, 1, 0];
   const opacity = useTransform(
     viewProgress,
-    [0, 0.333, 0.99, 1],
-    [0, 1, 1, 0],
+    [0, 0.3, 0.7, 1],
+    opacityOutput,
   );
 
   // Altitude-pan tracks own section scroll progress, -8% to +8% translateY.
@@ -93,6 +105,7 @@ export function ImageStack({
           biome={biome}
           sectionRef={sectionRefs[i]}
           isFirst={i === 0}
+          isLast={i === biomes.length - 1}
         />
       ))}
     </div>
