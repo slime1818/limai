@@ -4,11 +4,12 @@ import Image from "next/image";
 import {
   motion,
   useInView,
+  useMotionValueEvent,
   useReducedMotion,
   useScroll,
   useTransform,
 } from "motion/react";
-import type { RefObject } from "react";
+import { useEffect, useState, type RefObject } from "react";
 import type { Biome } from "../data/biomes";
 import { useIsCoarsePointer } from "../hooks/useIsCoarsePointer";
 import { BiomeScrim } from "./BiomeScrim";
@@ -24,12 +25,14 @@ function BiomeLayer({
   isFirst: boolean;
   isLast: boolean;
 }) {
+  const isCoarsePointer = useIsCoarsePointer();
   const shouldDecode = useInView(sectionRef, {
-    margin: "50% 0px",
+    // Strictere lazy-load op mobile (pas bij in-view decode) om GPU-memory druk te beperken.
+    // Desktop houdt 50% pre-roll voor smoother first-paint tijdens fade-in.
+    margin: isCoarsePointer ? "0% 0px" : "50% 0px",
     once: true,
   });
   const shouldReduceMotion = useReducedMotion();
-  const isCoarsePointer = useIsCoarsePointer();
 
   // Opacity crossfade via widened thresholds: fade-in 0-0.3, plateau 0.3-0.7, fade-out 0.7-1.
   // isFirst (Apu) skips fade-in so pageload shows full opacity immediately.
@@ -53,6 +56,27 @@ function BiomeLayer({
     opacityOutput,
   );
 
+  // Mobile GPU-compositing reductie via visibility-pruning. Layers met opacity < 0.01
+  // krijgen visibility:hidden zodat de compositor ze kan skippen. Typisch 1 layer visible
+  // tijdens plateau-zones, 2 tijdens crossfade-zones. Desktop (fine pointer) blijft altijd
+  // visible voor smooth render gedurende full page-scroll.
+  const [isMobileVisible, setIsMobileVisible] = useState(true);
+  useMotionValueEvent(opacity, "change", (v) => {
+    if (!isCoarsePointer) return;
+    const nowVisible = v > 0.01;
+    setIsMobileVisible((prev) => (prev !== nowVisible ? nowVisible : prev));
+  });
+  // Initial-sync: useMotionValueEvent fires alleen op CHANGE, niet op mount. Layers wiens
+  // opacity nooit van default-waarde verandert (zoals Puna op pageload, opacity 0 static)
+  // zouden isMobileVisible=true houden. Deze effect syncs bij coarse-pointer activation.
+  useEffect(() => {
+    if (!isCoarsePointer) return;
+    const nowVisible = opacity.get() > 0.01;
+    setIsMobileVisible((prev) => (prev !== nowVisible ? nowVisible : prev));
+  }, [isCoarsePointer, opacity]);
+  const computedVisibility =
+    !isCoarsePointer || isMobileVisible ? "visible" : "hidden";
+
   // Altitude-pan tracks own section scroll progress, -8% to +8% translateY.
   const { scrollYProgress: panProgress } = useScroll({
     target: sectionRef,
@@ -73,7 +97,7 @@ function BiomeLayer({
   return (
     <motion.div
       className="absolute inset-0 pointer-events-none"
-      style={{ opacity }}
+      style={{ opacity, visibility: computedVisibility }}
     >
       {renderImage ? (
         <>
