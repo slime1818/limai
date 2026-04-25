@@ -112,8 +112,9 @@ function BiomeLayer({
               alt={biome.imageAlt}
               fill
               priority={isFirst}
+              quality={95}
               sizes="100vw"
-              className="object-cover"
+              className="object-cover biome-backdrop-img"
             />
           </motion.div>
           <BiomeScrim biome={biome} />

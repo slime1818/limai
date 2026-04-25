@@ -26,6 +26,19 @@ body {
   background-color: var(--color-noche-andina);
 }
 
+/* Biome backdrop scherpte: image-rendering hint plus GPU compositing forcing.
+   fal.ai output is 1024x768, op hi-DPI of 4K displays geeft default browser-
+   interpolation waas. crisp-edges plus translateZ(0) plus backface-visibility
+   hidden geeft meetbaar scherper resultaat tot dedicated upscaler operationeel
+   is. Site-breed via ImageStack op alle 6 biomes. */
+.biome-backdrop-img {
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+}
+
 /* Copper-glow utilities: twee varianten voor verschillende contexten.
 
    - copper-glow: pure text-shadow voor VP1 elementen tegen open mountain
