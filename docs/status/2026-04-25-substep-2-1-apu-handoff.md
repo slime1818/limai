@@ -72,3 +72,19 @@ Tools Claude Code --dangerously-skip-permissions --model claude-opus-4-7
 - Copper-glow utility splitsing voor verschillende contexten essentieel
 - Counter-overlays op painting-darkness werken niet betrouwbaar
 - Cinematic intro 0.7s ipv 1.7s veel beter voor snelle scrollers
+
+## Alternatieve design-richting (in overweging)
+
+Tijdens substep 2.1 finale evaluatie ontdekte Olivier dat een minimale
+warm-bruine background (noche-andina body-bg plus drie warmte-overlays
+zonder painting Image) visueel rustiger en commerciëler voelt dan de
+painterly composities. Geparkeerd voor latere beoordeling.
+
+Mogelijke vervolgstappen:
+- Side-by-side test op separate /apu-minimal route voor objectieve vergelijking
+- Test op alle 6 biomes om te zien of minimal universeel werkt of per-biome
+  differentiation nodig is
+- Beslissing voor LimAI brand-richting: painterly behouden, minimal switchen,
+  of hybride
+
+Geen commit nu, eerst alle 6 biomes desktop+mobile content hebben.
