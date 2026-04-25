@@ -25,6 +25,9 @@ export function BiomeSection({
       <div className="absolute inset-0 z-10">
         <div className="h-screen flex items-center px-8 md:px-16 lg:px-24">
           <div className="max-w-2xl">
+            {/* TODO substep follow-up: non-Apu biomes moeten naar h2 voor SEO. Enige
+                visible h1 op de homepage hoort "LimAI" in ApuSection te zijn (apu.md
+                regel 157). Geparkeerd buiten substep 2.1 scope. */}
             <h1
               style={textStyle}
               className="font-display text-warm-white text-6xl md:text-8xl lg:text-9xl leading-none tracking-tight"

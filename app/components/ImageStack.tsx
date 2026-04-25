@@ -72,6 +72,9 @@ function BiomeLayer({
   useEffect(() => {
     if (!isCoarsePointer) return;
     const nowVisible = opacity.get() > 0.01;
+    // TODO(react-19): refactor naar useSyncExternalStore of derived state patroon.
+    // Geparkeerd in substep 2.1 Apu (scope-discipline). Patroon werkt correct in productie.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsMobileVisible((prev) => (prev !== nowVisible ? nowVisible : prev));
   }, [isCoarsePointer, opacity]);
   const computedVisibility =

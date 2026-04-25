@@ -1,25 +1,37 @@
 "use client";
 
-import { createRef, useRef, type RefObject } from "react";
+import { createRef, useState, type RefObject } from "react";
 import type { Biome } from "../data/biomes";
+import { ApuSection } from "./ApuSection";
 import { BiomeSection } from "./BiomeSection";
 import { ImageStack } from "./ImageStack";
 
 export function BiomeScroller({ biomes }: { biomes: Biome[] }) {
-  const sectionRefs = useRef<Array<RefObject<HTMLElement | null>>>(
-    biomes.map(() => createRef<HTMLElement>()),
-  );
+  // useState lazy initializer ipv useRef of useMemo: garandeert stable identity
+  // van de createRef-array over alle renders heen, zonder .current access tijdens
+  // render (react-hooks/refs lint clean). Setter wordt nooit aangeroepen.
+  const sectionRefs = useState<Array<RefObject<HTMLElement | null>>>(
+    () => biomes.map(() => createRef<HTMLElement>()),
+  )[0];
 
   return (
     <>
-      <ImageStack biomes={biomes} sectionRefs={sectionRefs.current} />
-      {biomes.map((biome, i) => (
-        <BiomeSection
-          key={biome.id}
-          biome={biome}
-          sectionRef={sectionRefs.current[i]}
-        />
-      ))}
+      <ImageStack biomes={biomes} sectionRefs={sectionRefs} />
+      {biomes.map((biome, i) =>
+        biome.id === "apu" ? (
+          <ApuSection
+            key={biome.id}
+            biome={biome}
+            sectionRef={sectionRefs[i]}
+          />
+        ) : (
+          <BiomeSection
+            key={biome.id}
+            biome={biome}
+            sectionRef={sectionRefs[i]}
+          />
+        ),
+      )}
     </>
   );
 }

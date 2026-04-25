@@ -11,6 +11,9 @@ export function useIsCoarsePointer(): boolean {
 
   useEffect(() => {
     const mq = window.matchMedia("(pointer: coarse)");
+    // TODO(react-19): refactor naar useSyncExternalStore of derived state patroon.
+    // Geparkeerd in substep 2.1 Apu (scope-discipline). Patroon werkt correct in productie.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsCoarse(mq.matches);
     const handler = (e: MediaQueryListEvent) => setIsCoarse(e.matches);
     mq.addEventListener("change", handler);

@@ -19,8 +19,7 @@ export const biomes: Biome[] = [
     imageAlt:
       "Andes-bergwand met ijzige top bij dageraad, rotspartij links op de voorgrond",
     title: "LimAI",
-    tagline:
-      "Sites voor merken met iets te zeggen. Een studio uit Amsterdam met wortels in de Andes.",
+    tagline: "Websites met karakter.",
     viewport2Teaser: null,
     ctaLabel: null,
     ctaHref: null,
