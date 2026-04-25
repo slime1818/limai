@@ -21,7 +21,11 @@ export function BiomeSection({
     biome.id === "selva" ? SELVA_TEXT_SHADOW : undefined;
 
   return (
-    <section ref={sectionRef} className="relative w-full h-[200vh]">
+    <section
+      ref={sectionRef}
+      id={biome.id}
+      className="relative w-full h-[200vh]"
+    >
       <div className="absolute inset-0 z-10">
         <div className="h-screen flex items-center px-8 md:px-16 lg:px-24">
           <div className="max-w-2xl">

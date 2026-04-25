@@ -5,6 +5,7 @@
   --color-noche-andina: #1a1612;
   --color-paper-cream: #f8f3ea;
   --color-andes-copper: #b87f4a;
+  --color-andes-copper-bright: #d49a6a;
   --color-mountain-slate: #3d4247;
   --color-ichu-gold: #c4a559;
   --color-secondary-warm: #e8e0d6;
@@ -23,4 +24,45 @@
 body {
   font-family: var(--font-sans);
   background-color: var(--color-noche-andina);
+}
+
+/* Copper-glow utilities: twee varianten voor verschillende contexten.
+
+   - copper-glow: pure text-shadow voor VP1 elementen tegen open mountain
+     backdrop. Geen pseudo-backdrop, halo strikt per glyph. Voorkomt het
+     "blok-achter-tekst" effect dat een visuele balk-sensatie kon geven.
+   - copper-glow-soft: pseudo-element backdrop voor contexten waar diffuse
+     halo gewenst is, zoals VP2 plus-punten cards waar tekst tegen donkere
+     card-bg staat en een extra atmosferische scrim de leesbaarheid versterkt.
+
+   In @layer components zodat Tailwind's utilities-layer (absolute, fixed, etc.)
+   blijft winnen voor elementen die hun eigen positionering hebben. */
+@layer components {
+  .copper-glow {
+    text-shadow:
+      0 1px 2px rgba(26, 22, 18, 0.85),
+      0 2px 8px rgba(26, 22, 18, 0.65),
+      0 0 16px rgba(26, 22, 18, 0.4);
+  }
+
+  .copper-glow-soft {
+    position: relative;
+    isolation: isolate;
+  }
+
+  .copper-glow-soft::before {
+    content: "";
+    position: absolute;
+    inset: -10px -20px;
+    background: radial-gradient(
+      ellipse at center,
+      rgba(26, 22, 18, 0.55) 0%,
+      rgba(26, 22, 18, 0.25) 45%,
+      transparent 75%
+    );
+    filter: blur(14px);
+    z-index: -1;
+    pointer-events: none;
+    border-radius: 9999px;
+  }
 }

@@ -1,10 +1,14 @@
 import type { Biome } from "../data/biomes";
 
 export function BiomeScrim({ biome }: { biome: Biome }) {
-  if (biome.id === "selva") {
-    // Selva rendert geen F6 scrim: TOP-framing canopy plus pikzwart schilder-schaduw
-    // bottom-left clashen met left-fade. Text-shadow alternatief landt op content-layer
+  if (biome.id === "selva" || biome.id === "apu") {
+    // Selva: TOP-framing canopy plus pikzwart schilder-schaduw bottom-left
+    // clashen met left-fade. Text-shadow alternatief landt op content-layer
     // in BiomeSection (Variant A per commit 1dea0f4 + substep 13).
+    // Apu: site-breed F6 conflicteert met de bovenste helft van VP1 (eyebrow
+    // links, LIMA-pill rechtsboven). ApuSection rendert eigen lokale content-
+    // scrim (z-6 radial onder content-zone) plus warmte-overlays als alternatief
+    // (substep 2.1 commercial revision).
     return null;
   }
   return (
