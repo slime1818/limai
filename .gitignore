@@ -66,3 +66,6 @@ __pycache__/
 
 # Screenshots buiten content-drafts
 docs/screenshots/
+
+# Font binaries voor signature-generator (reproduceerbaar via scripts/generate_signatures.py)
+scripts/fonts/

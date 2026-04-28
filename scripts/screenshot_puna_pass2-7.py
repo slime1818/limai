@@ -1,0 +1,158 @@
+"""Capture pass 2.7 productie-staat: VP1 Olivier, VP2 Abdul, plus cross-biome
+Apu+Puna grid voor cohesie-check.
+
+Loopt tegen een lopende Next.js dev-server op localhost:3000. Geen query-param
+gebruikt zodat productie-default gerendered wordt (fullbleed-cutout-clean +
+allura + pills).
+"""
+
+import urllib.request
+from pathlib import Path
+from typing import List, Tuple
+
+from playwright.sync_api import sync_playwright
+from PIL import Image, ImageDraw, ImageFont
+
+OUT_DIR = Path("docs/screenshots/fase-2")
+OUT_DIR.mkdir(parents=True, exist_ok=True)
+
+VIEWPORT_W, VIEWPORT_H = 1440, 900
+
+
+def prewarm(timeout: float = 120.0) -> None:
+    req = urllib.request.Request("http://localhost:3000/")
+    with urllib.request.urlopen(req, timeout=timeout) as resp:
+        resp.read()
+        print(f"[prewarm] HTTP {resp.status} on /")
+
+
+def capture_puna() -> Tuple[Path, Path]:
+    out_vp1 = OUT_DIR / "puna-vp1-olivier-pass2-7.png"
+    out_vp2 = OUT_DIR / "puna-vp2-abdul-pass2-7.png"
+    with sync_playwright() as p:
+        browser = p.chromium.launch(headless=True)
+        context = browser.new_context(
+            viewport={"width": VIEWPORT_W, "height": VIEWPORT_H},
+            device_scale_factor=2,
+        )
+        page = context.new_page()
+        page.goto(
+            "http://localhost:3000/",
+            wait_until="domcontentloaded",
+            timeout=60000,
+        )
+        page.wait_for_selector("h1", state="visible", timeout=15000)
+        page.wait_for_function(
+            "Array.from(document.images).every(i => i.complete && i.naturalWidth > 0)",
+            timeout=30000,
+        )
+        page.wait_for_timeout(1500)
+
+        page.evaluate(
+            "document.getElementById('puna').scrollIntoView({behavior: 'instant', block: 'start'});"
+        )
+        page.wait_for_timeout(800)
+        page.screenshot(path=str(out_vp1), full_page=False)
+        print(f"[VP1] -> {out_vp1} ({out_vp1.stat().st_size} bytes)")
+
+        page.evaluate("window.scrollBy(0, window.innerHeight);")
+        page.wait_for_timeout(800)
+        page.screenshot(path=str(out_vp2), full_page=False)
+        print(f"[VP2] -> {out_vp2} ({out_vp2.stat().st_size} bytes)")
+
+        browser.close()
+    return out_vp1, out_vp2
+
+
+def capture_apu() -> Path:
+    out = OUT_DIR / "_pass2-7-apu-vp1.png"
+    with sync_playwright() as p:
+        browser = p.chromium.launch(headless=True)
+        context = browser.new_context(
+            viewport={"width": VIEWPORT_W, "height": VIEWPORT_H},
+            device_scale_factor=2,
+        )
+        page = context.new_page()
+        page.goto(
+            "http://localhost:3000/",
+            wait_until="domcontentloaded",
+            timeout=60000,
+        )
+        page.wait_for_selector("h1", state="visible", timeout=15000)
+        page.wait_for_function(
+            "Array.from(document.images).every(i => i.complete && i.naturalWidth > 0)",
+            timeout=30000,
+        )
+        page.wait_for_timeout(1500)
+        page.evaluate("window.scrollTo(0, 0);")
+        page.wait_for_timeout(800)
+        page.screenshot(path=str(out), full_page=False)
+        browser.close()
+    print(f"[Apu] -> {out} ({out.stat().st_size} bytes)")
+    return out
+
+
+def load_label_font(size: int) -> ImageFont.ImageFont:
+    candidates = [
+        "C:/Windows/Fonts/segoeui.ttf",
+        "C:/Windows/Fonts/arial.ttf",
+        "/System/Library/Fonts/SFNS.ttf",
+        "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
+    ]
+    for path in candidates:
+        if Path(path).exists():
+            try:
+                return ImageFont.truetype(path, size)
+            except OSError:
+                continue
+    return ImageFont.load_default()
+
+
+def assemble_cross_biome(apu_path: Path, puna_path: Path) -> Path:
+    cell_w = VIEWPORT_W // 2
+    cell_h = VIEWPORT_H
+    label_h = 60
+    gutter = 8
+
+    img_w = cell_w * 2 + gutter * 3
+    img_h = cell_h + label_h + gutter * 3
+    canvas = Image.new("RGB", (img_w, img_h), (26, 22, 18))
+    draw = ImageDraw.Draw(canvas)
+    font = load_label_font(28)
+
+    cells: List[Tuple[Path, str]] = [
+        (apu_path, "Apu hero VP1"),
+        (puna_path, "Puna VP1 — Olivier"),
+    ]
+
+    for idx, (path, label) in enumerate(cells):
+        x = gutter + idx * (cell_w + gutter)
+        y = gutter
+
+        with Image.open(path) as img:
+            thumb = img.convert("RGB").resize((cell_w, cell_h), Image.LANCZOS)
+            canvas.paste(thumb, (x, y))
+
+        label_y = y + cell_h
+        draw.rectangle(
+            [(x, label_y), (x + cell_w, label_y + label_h)],
+            fill=(34, 28, 22),
+        )
+        bbox = draw.textbbox((0, 0), label, font=font)
+        text_w = bbox[2] - bbox[0]
+        text_h = bbox[3] - bbox[1]
+        text_x = x + (cell_w - text_w) // 2
+        text_y = label_y + (label_h - text_h) // 2 - bbox[1]
+        draw.text((text_x, text_y), label, fill=(212, 154, 106), font=font)
+
+    out = OUT_DIR / "cross-biome-apu-puna-pass2-7.png"
+    canvas.save(out)
+    print(f"[grid] -> {out} ({out.stat().st_size} bytes)")
+    return out
+
+
+if __name__ == "__main__":
+    prewarm()
+    vp1, _vp2 = capture_puna()
+    apu_path = capture_apu()
+    assemble_cross_biome(apu_path, vp1)

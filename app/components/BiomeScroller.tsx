@@ -5,6 +5,7 @@ import type { Biome } from "../data/biomes";
 import { ApuSection } from "./ApuSection";
 import { BiomeSection } from "./BiomeSection";
 import { ImageStack } from "./ImageStack";
+import { PunaSection } from "./PunaSection";
 
 export function BiomeScroller({ biomes }: { biomes: Biome[] }) {
   // useState lazy initializer ipv useRef of useMemo: garandeert stable identity
@@ -17,21 +18,33 @@ export function BiomeScroller({ biomes }: { biomes: Biome[] }) {
   return (
     <>
       <ImageStack biomes={biomes} sectionRefs={sectionRefs} />
-      {biomes.map((biome, i) =>
-        biome.id === "apu" ? (
-          <ApuSection
-            key={biome.id}
-            biome={biome}
-            sectionRef={sectionRefs[i]}
-          />
-        ) : (
+      {biomes.map((biome, i) => {
+        if (biome.id === "apu") {
+          return (
+            <ApuSection
+              key={biome.id}
+              biome={biome}
+              sectionRef={sectionRefs[i]}
+            />
+          );
+        }
+        if (biome.id === "puna") {
+          return (
+            <PunaSection
+              key={biome.id}
+              biome={biome}
+              sectionRef={sectionRefs[i]}
+            />
+          );
+        }
+        return (
           <BiomeSection
             key={biome.id}
             biome={biome}
             sectionRef={sectionRefs[i]}
           />
-        ),
-      )}
+        );
+      })}
     </>
   );
 }
